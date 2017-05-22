@@ -159,7 +159,7 @@ public class CommonBaseViewHolder {
             return this;
         }
         ImageView imageView = getView(viewId);
-        ImageLoader.loadNoAnimate(activity , imageView , defaultResId , url , width , height);
+//        ImageLoader.loadNoAnimate(activity , imageView , defaultResId , url , width , height);
         return this;
     }
 
