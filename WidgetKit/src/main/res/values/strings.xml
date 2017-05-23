@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">widgetKit</string>
+
+    <string name="speak_msg_up">手指上滑，取消录制</string>
+    <string name="speak_msg_release">松开手指，取消录制</string>
+    <string name="speak_msg_too_short">说话时间太短</string>
+    <string name="speak_txt_normal">按住 说话</string>
+    <string name="speak_txt_pressed">松开 结束</string>
+
 </resources>

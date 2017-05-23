@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="white">#fff</color>
+
+    <color name="transparent">#0000</color>
+
+    <color name="black">#000</color>
+    <!-- 20%透明，80%不透明 黑 -->
+    <color name="color_alpha20">#BB000000</color>
+    <!-- 40%透明，60%不透明 黑 -->
+    <color name="color_alpah40">#AA000000</color>
+    <!-- 50%透明，50%不透明 黑 -->
+    <color name="color_alpha50">#88000000</color>
+    <!-- 60%透明，40%不透明 黑 -->
+    <color name="color_alpha60">#66000000</color>
+    <!-- 80%透明，40%不透明 黑 -->
+    <color name="color_alpha80">#33000000</color>
+
+    <color name="color_b52225alpha_50">#88b52225</color>
+</resources>
