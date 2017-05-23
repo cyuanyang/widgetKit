@@ -3,7 +3,7 @@ package com.cyy.widgetkit.tools;
 import android.app.Activity;
 import android.util.DisplayMetrics;
 
-import com.xstudy.assistteacher.App;
+import com.cyy.widgetkit.WidgetKit;
 
 /**
  * Created by cyy
@@ -20,7 +20,7 @@ public class DisplayUtils {
     public static int dip2px(int dpValue) {
         float scale = 0;
         try {
-            scale = App.getApp().getResources().getDisplayMetrics().density;
+            scale = WidgetKit.getWidgetKit().getApp().getResources().getDisplayMetrics().density;
         } catch (Exception e) {
             return dpValue;
         }
@@ -35,7 +35,7 @@ public class DisplayUtils {
     public static int dip2px(double dpValue) {
         float scale = 0;
         try {
-            scale = App.getApp().getResources().getDisplayMetrics().density;
+            scale = WidgetKit.getWidgetKit().getApp().getResources().getDisplayMetrics().density;
         } catch (Exception e) {
             return (int) dpValue;
         }
@@ -49,7 +49,7 @@ public class DisplayUtils {
      * @return
      */
     public static int px2dip(int pxValue) {
-        final float scale = App.getApp().getResources().getDisplayMetrics().density;
+        final float scale = WidgetKit.getWidgetKit().getApp().getResources().getDisplayMetrics().density;
         return (int) (pxValue / scale + 0.5f);
     }
 
@@ -60,7 +60,7 @@ public class DisplayUtils {
      * @return
      */
     public static int px2sp(int pxValue) {
-        final float scale = App.getApp().getResources().getDisplayMetrics().scaledDensity;
+        final float scale = WidgetKit.getWidgetKit().getApp().getResources().getDisplayMetrics().scaledDensity;
         return (int) (pxValue / scale + 0.5f);
     }
 
@@ -71,7 +71,7 @@ public class DisplayUtils {
      * @return
      */
     public static int sp2px( int spValue) {
-        final float scale = App.getApp().getResources().getDisplayMetrics().scaledDensity;
+        final float scale = WidgetKit.getWidgetKit().getApp().getResources().getDisplayMetrics().scaledDensity;
         return (int) (spValue * scale + 0.5f);
     }
 
@@ -81,7 +81,7 @@ public class DisplayUtils {
      * @return
      */
     public static int px2dip(double pxValue) {
-        float m = App.getApp().getResources().getDisplayMetrics().density;
+        float m = WidgetKit.getWidgetKit().getApp().getResources().getDisplayMetrics().density;
         return (int) (pxValue / m + 0.5f);
     }
 

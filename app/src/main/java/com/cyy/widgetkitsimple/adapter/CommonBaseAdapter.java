@@ -1,4 +1,4 @@
-package com.cyy.widgetkit.adapter;
+package com.cyy.widgetkitsimple.adapter;
 
 import android.content.Context;
 import android.view.View;

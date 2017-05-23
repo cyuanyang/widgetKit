@@ -1,11 +1,11 @@
-package com.cyy.widgetkit.activity;
+package com.cyy.widgetkitsimple.activity;
 
 import android.os.Bundle;
 import android.widget.ListView;
 
-import com.cyy.widgetkit.R;
-import com.cyy.widgetkit.adapter.SimpleAdapter;
-import com.cyy.widgetkit.base.BaseActivity;
+import com.cyy.widgetkitsimple.R;
+import com.cyy.widgetkitsimple.adapter.SimpleAdapter;
+import com.cyy.widgetkitsimple.base.BaseActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,13 +16,15 @@ public class MainActivity extends BaseActivity {
 
     private SimpleAdapter adapter ;
 
+    private List<String> datas = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.activity_main);
         initView();
 
-        List<String> datas = new ArrayList<>();
+
         for (int i = 0; i < 20; i++) {
             datas.add("d" + i);
         }

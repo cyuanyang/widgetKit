@@ -1,4 +1,4 @@
-package com.cyy.widgetkit;
+package com.cyy.widgetkitsimple;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

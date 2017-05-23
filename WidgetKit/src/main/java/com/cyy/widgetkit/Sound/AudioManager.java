@@ -3,6 +3,7 @@ package com.cyy.widgetkit.Sound;
 import android.content.Context;
 import android.media.MediaRecorder;
 
+import com.cyy.widgetkit.WidgetKit;
 import com.cyy.widgetkit.tools.FileUtils;
 import com.cyy.widgetkit.tools.MD5;
 
@@ -22,9 +23,7 @@ public class AudioManager {
     private boolean isRecording;//是否在录音
 
     public AudioManager(){
-        Context context;
-//        context.getExternalFilesDir()
-        dirFile = App.getApp().getExternalFilesDir("audios");
+        dirFile = WidgetKit.getWidgetKit().getApp().getExternalFilesDir("audios");
     }
     /**
      * 开始录音

@@ -1,4 +1,4 @@
-package com.cyy.widgetkit;
+package com.cyy.widgetkitsimple;
 
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package com.cyy.widgetkit.adapter;
+package com.cyy.widgetkitsimple.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.cyy.widgetkit.base.BaseActivity;
+import com.cyy.widgetkitsimple.base.BaseActivity;
 
 
 /**

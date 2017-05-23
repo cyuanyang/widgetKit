@@ -1,4 +1,4 @@
-package com.cyy.widgetkit.base;
+package com.cyy.widgetkitsimple.base;
 
 import android.support.v7.app.AppCompatActivity;
 

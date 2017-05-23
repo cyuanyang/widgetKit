@@ -1,6 +1,4 @@
-package com.cyy.widgetkit.drawable;
-
-import android.graphics.drawable.Drawable;
+package com.cyy.widgetkitsimple.drawable;
 
 /**
  * Created by chenyuanyang on 2017/5/22.

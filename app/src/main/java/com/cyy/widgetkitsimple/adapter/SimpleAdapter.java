@@ -1,8 +1,9 @@
-package com.cyy.widgetkit.adapter;
+package com.cyy.widgetkitsimple.adapter;
 
 import android.content.Context;
 
-import com.cyy.widgetkit.R;
+
+import com.cyy.widgetkitsimple.R;
 
 import java.util.List;
 
