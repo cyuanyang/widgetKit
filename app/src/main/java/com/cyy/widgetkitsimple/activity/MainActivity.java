@@ -1,6 +1,7 @@
 package com.cyy.widgetkitsimple.activity;
 
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.widget.ListView;
 
 import com.cyy.widgetkitsimple.R;
@@ -25,12 +26,15 @@ public class MainActivity extends BaseActivity {
         initView();
 
 
-        for (int i = 0; i < 20; i++) {
-            datas.add("d" + i);
-        }
+
 
         adapter = new SimpleAdapter(this ,datas );
         listView.setAdapter(adapter);
+    }
+
+    private void initData(){
+        datas.add("声音");
+        datas.add("PagerSlidingTabStrip");
     }
 
     private void initView() {
