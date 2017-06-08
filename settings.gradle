@@ -1,1 +1,1 @@
-include ':app', ':widgetkit', ':canvasview'
+include ':app', ':soundview', ':canvasview'
