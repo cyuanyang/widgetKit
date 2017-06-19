@@ -2,7 +2,7 @@ MathView
 
 展示数学公式的View。基于MathJax的封装，删除了一些不必要的文件。
 
-[](./device-2017-06-19-175546.png)
+[](https://github.com/cyuanyang/widgetKit/blob/master/mathview_mathjax/device-2017-06-19-175546.png)
 
 *******
 
