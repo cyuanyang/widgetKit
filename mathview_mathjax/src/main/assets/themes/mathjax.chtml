@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="file:///android_asset/themes/style.css">
+        <script type="text/x-mathjax-config">
+             MathJax.Hub.Config({
+                            showProcessingMessages: false,
+                            messageStyle: 'none',
+                            extensions: ["tex2jax.js"],
+                            jax: ["input/TeX","output/HTML-CSS"],
+                            tex2jax: {
+                                inlineMath: [ ["$","$"] , ["\\(","\\)" ] ]
+                            },
+                            "HTML-CSS": {
+                                showMathMenu: false
+                            }
+                        });
+
+                MathJax.Hub.Startup.signal.Interest(function (message) {
+                    if(message == "End"){
+                        androidJS.mathCallback(0);
+                    }else if(message == "Begin"){
+                        androidJS.mathCallback(1);
+                    }
+                });
+        </script>
+        <script type="text/x-mathjax-config">
+            {$config}
+        </script>
+        <script type="text/javascript"
+            src="file:///android_asset/MathJaxNew/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+        </script>
+    </head>
+    <body>
+        {$formula}
+    </body>
+</html>

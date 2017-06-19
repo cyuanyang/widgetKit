@@ -3,7 +3,7 @@
     package="com.cyy.widgetkitsimple">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application
         android:name=".base.App"
@@ -21,7 +21,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".simple.canvasviewsimple.CanvasViewSimpleActivity" />
-        <activity android:name=".simple.soundsimple.SoundSimpleActivity"></activity>
+        <activity android:name=".simple.soundsimple.SoundSimpleActivity" />
+        <activity android:name=".simple.mathview.MathViewSimple"></activity>
     </application>
 
 </manifest>

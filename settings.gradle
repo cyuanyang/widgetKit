@@ -1,1 +1,1 @@
-include ':app', ':soundview', ':canvasview'
+include ':app', ':soundview', ':canvasview', ':mathview_mathjax'

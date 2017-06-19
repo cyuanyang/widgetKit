@@ -17,4 +17,6 @@
     <color name="color_alpha80">#33000000</color>
 
     <color name="color_b52225alpha_50">#88b52225</color>
+
+    <color name="red">#f00</color>
 </resources>
