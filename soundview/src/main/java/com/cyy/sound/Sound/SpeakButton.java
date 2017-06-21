@@ -96,18 +96,16 @@ public class SpeakButton extends TextView {
             int during = (int) (System.currentTimeMillis()-soundTime);
             if (during > MIN_SOUND){
                 popWindow.dismiss();
-                audioManager.release();
                 if (speakCallback!=null)speakCallback.endSpeak(file , during);
             }else {
                 popWindow.speakTooShort();
-                audioManager.release();
             }
         }else {
             popWindow.dismiss();
             cancelRecord();
         }
-
         removeCallbacks(updateMicRunnable);
+        audioManager.release();
     }
 
     @Override

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="SoundView">
+        <attr name="soundBackgroundDrawable" format="reference"/>
+        <attr name="soundAnimateDrawablw" format="reference"/>
+        <attr name="soundAnimatePlaceHolder" format="reference"/>
+        <attr name="retryImageRes" format="reference"/>
+    </declare-styleable>
+
+</resources>

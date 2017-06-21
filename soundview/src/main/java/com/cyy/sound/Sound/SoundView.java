@@ -1,6 +1,7 @@
 package com.cyy.sound.Sound;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.drawable.AnimationDrawable;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
@@ -33,8 +34,8 @@ public class SoundView extends RelativeLayout implements View.OnClickListener,
         void playComplete(SoundView soundView); //播放完成
     }
 
-    private static final int MIN_WIDTH = 90; //单位dp
-    private static final int MAX_WIDTH = 160; //单位DP
+    private static final int MIN_WIDTH = 90; //单位dp 声音背景的最小长度
+    private static final int MAX_WIDTH = 160; //单位DP 声音背景的最大长度
 
     private TextView soundTimeView;//声音的时间View
     private View bgView;//声音的背景View 根据声音的长度确定这个View的宽度
@@ -48,30 +49,53 @@ public class SoundView extends RelativeLayout implements View.OnClickListener,
 
     private PlaySoundManager playSoundManager;
 
+    private int soundAnimateRes;
+    private int soundAnimateholder;//动画占位图
+
     public SoundView(Context context) {
         super(context);
-        init();
+        init(null);
     }
 
     public SoundView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        init();
+        init( attrs);
     }
 
     public SoundView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
+        init(attrs);
     }
 
-    private void init(){
+    private void init( AttributeSet attrs){
+        int soundBackgroundDrawable = 0;
+        int retryRes = 0 ;
+        if (attrs!=null){
+            TypedArray typedArray = getContext().obtainStyledAttributes(attrs , R.styleable.SoundView);
+            soundBackgroundDrawable = typedArray.getResourceId(R.styleable.SoundView_soundBackgroundDrawable , 0);
+            soundAnimateRes = typedArray.getResourceId(R.styleable.SoundView_soundAnimateDrawablw , 0);
+            soundAnimateholder = typedArray.getResourceId(R.styleable.SoundView_soundAnimatePlaceHolder , 0);
+            retryRes = typedArray.getResourceId(R.styleable.SoundView_retryImageRes , 0);
+            typedArray.recycle();
+        }
+
         LayoutInflater.from(this.getContext()).inflate(R.layout.view_sound , this);
         soundTimeView = (TextView) findViewById(R.id.soundTimeView);
         bgView = findViewById(R.id.bgView);
         bgView.setOnClickListener(this);
+        if (soundBackgroundDrawable!=0){
+            bgView.setBackgroundResource(soundBackgroundDrawable);
+        }
         soundImageView = (ImageView) findViewById(R.id.soundImageView);
+        if (soundAnimateholder!=0){
+            soundImageView.setImageResource(soundAnimateholder);
+        }
         progressBar = (ProgressBar) findViewById(R.id.progressView);
         retryView = (ImageView) findViewById(R.id.retryView);
         retryView.setOnClickListener(this);
+        if (retryRes!=0){
+            retryView.setImageResource(retryRes);
+        }
 
         //初始化播放
         playSoundManager = new PlaySoundManager();
@@ -109,6 +133,7 @@ public class SoundView extends RelativeLayout implements View.OnClickListener,
         stopPlayAmin();
     }
 
+    //后台处理完成调用 显示左边的文字
     public void showSoundTextView(){
         progressBar.setVisibility(GONE);
         soundTimeView.setVisibility(VISIBLE);
@@ -120,6 +145,7 @@ public class SoundView extends RelativeLayout implements View.OnClickListener,
             LinearLayout.LayoutParams lp =
                     new LinearLayout.LayoutParams(time2Width(sound.soundTime) , DisplayUtils.dip2px(40));
             lp.rightMargin = DisplayUtils.dip2px(20);
+            lp.topMargin = DisplayUtils.dip2px(20);
             parentView.addView(this ,  0, lp );
         }else {
             throw new IllegalArgumentException("先调用setSound");
@@ -139,7 +165,11 @@ public class SoundView extends RelativeLayout implements View.OnClickListener,
 
     //开始播放动画
     private void startPlayAnim(){
-        soundImageView.setImageResource(R.drawable.play_sound_anim);
+        if (soundAnimateRes==0){
+            soundImageView.setImageResource(R.drawable.play_sound_anim);
+        }else {
+            soundImageView.setImageResource(soundAnimateRes);
+        }
         AnimationDrawable animationDrawable = (AnimationDrawable) soundImageView.getDrawable();
         if (animationDrawable!=null && !animationDrawable.isRunning()){
             animationDrawable.start();
@@ -151,7 +181,12 @@ public class SoundView extends RelativeLayout implements View.OnClickListener,
         AnimationDrawable animationDrawable = (AnimationDrawable) soundImageView.getDrawable();
         if (animationDrawable!=null && animationDrawable.isRunning()){
             animationDrawable.stop();
-            soundImageView.setImageResource(R.drawable.ic_voice3);
+            if (soundAnimateholder==0){
+                soundImageView.setImageResource(R.drawable.ic_voice3);
+            }else {
+                soundImageView.setImageResource(soundAnimateholder);
+            }
+
         }
     }
 

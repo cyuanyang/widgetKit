@@ -5,23 +5,26 @@
 
     <FrameLayout
         android:id="@+id/leftIndicateView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_centerVertical="true">
         <ProgressBar
             android:id="@+id/progressView"
             android:layout_width="20dp"
             android:layout_height="20dp"
+            android:layout_gravity="center"
             android:visibility="gone"/>
         <TextView
             android:id="@+id/soundTimeView"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"/>
         <ImageView
             android:id="@+id/retryView"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:src="@drawable/ic_result_error"
+            android:layout_gravity="center"
             android:visibility="gone"/>
     </FrameLayout>
 
@@ -38,6 +41,5 @@
         android:id="@+id/bgView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/ic_voice"
-        android:layout_marginLeft="10dp"/>
+        android:background="@drawable/ic_voice"/>
 </RelativeLayout>
