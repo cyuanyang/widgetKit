@@ -6,15 +6,22 @@
     android:layout_height="match_parent"
     tools:context=".simple.canvasviewsimple.CanvasViewSimpleActivity">
 
-    <com.cyy.canvasview.CanvasView
-        android:id="@+id/canvasView"
+
+    <FrameLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/c_2b2b2b"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent">
+        <com.cyy.canvasview.CanvasView
+            android:id="@+id/canvasView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+    </FrameLayout>
+
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="0dp"

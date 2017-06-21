@@ -68,11 +68,11 @@ public class CanvasViewSimpleActivity extends BaseActivity implements View.OnCli
         if (view.getId() == R.id.penView) {
             canvasView.pen();
         } else if (view.getId() == R.id.eraserView) {
-            canvasView.easer();
+            canvasView.eraser();
         } else if (view.getId() == R.id.rotateLeftBtn) {
-
+            canvasView.rotate(false);
         } else if (view.getId() == R.id.rotateRightBtn) {
-
+            canvasView.rotate(true);
         }
     }
 }
