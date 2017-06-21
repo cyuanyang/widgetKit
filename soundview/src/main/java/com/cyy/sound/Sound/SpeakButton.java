@@ -100,6 +100,7 @@ public class SpeakButton extends TextView {
                 if (speakCallback!=null)speakCallback.endSpeak(file , during);
             }else {
                 popWindow.speakTooShort();
+                audioManager.release();
             }
         }else {
             popWindow.dismiss();
@@ -147,6 +148,7 @@ public class SpeakButton extends TextView {
      */
     public interface SpeakCallback{
         void endSpeak(File sourceFile, int during); //结束录音
+        void speakTooShort();//录音太短了
     }
 
 }

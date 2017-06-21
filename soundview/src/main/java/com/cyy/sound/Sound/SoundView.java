@@ -24,11 +24,13 @@ import java.io.File;
  * 声音的可视化View
  */
 
-public class SoundView extends RelativeLayout implements View.OnClickListener{
+public class SoundView extends RelativeLayout implements View.OnClickListener,
+        PlaySoundManager.PlaySoundListener{
 
-    public interface ClickSoundListener{
-        void clickSound(SoundView soundView);
+    public interface SoundListener{
+        void clickSound(SoundView soundView); //点击开始播放
         void retryAction(SoundView soundView);
+        void playComplete(SoundView soundView); //播放完成
     }
 
     private static final int MIN_WIDTH = 90; //单位dp
@@ -41,8 +43,10 @@ public class SoundView extends RelativeLayout implements View.OnClickListener{
     private ImageView retryView;//重试
 
     private Sound sound; //声音文件
-    private ClickSoundListener soundListener;
+    private SoundListener soundListener;
     private boolean isPlaying = false;
+
+    private PlaySoundManager playSoundManager;
 
     public SoundView(Context context) {
         super(context);
@@ -68,6 +72,10 @@ public class SoundView extends RelativeLayout implements View.OnClickListener{
         progressBar = (ProgressBar) findViewById(R.id.progressView);
         retryView = (ImageView) findViewById(R.id.retryView);
         retryView.setOnClickListener(this);
+
+        //初始化播放
+        playSoundManager = new PlaySoundManager();
+        playSoundManager.setPlaySoundListener(this);
     }
 
     public void setSound(Sound sound){
@@ -79,7 +87,7 @@ public class SoundView extends RelativeLayout implements View.OnClickListener{
         return sound;
     }
 
-    public void setSoundListener(ClickSoundListener soundListener) {
+    public void setSoundListener(SoundListener soundListener) {
         this.soundListener = soundListener;
     }
 
@@ -92,11 +100,13 @@ public class SoundView extends RelativeLayout implements View.OnClickListener{
         soundTimeView.setVisibility(GONE);
         retryView.setVisibility(GONE);
     }
+
     //后台对声音的处理出错
     public void showRetryView(){
         retryView.setVisibility(VISIBLE);
         progressBar.setVisibility(GONE);
         soundTimeView.setVisibility(GONE);
+        stopPlayAmin();
     }
 
     public void showSoundTextView(){
@@ -149,14 +159,35 @@ public class SoundView extends RelativeLayout implements View.OnClickListener{
     public void onClick(View v) {
         if (v.getId() == R.id.bgView){ //点击背景
             if (this.soundListener != null){
-                startPlayAnim();
                 soundListener.clickSound(this);
             }
+            startPlayAnim();
+            playSoundManager.playSound(sound.getSoundFile());
         }else if (v.getId() == R.id.retryView){
             //点击重试
             if (this.soundListener!=null)soundListener.retryAction(this );
+            startPlayAnim();
+            playSoundManager.playSound(sound.getSoundFile());
         }
+    }
 
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        if (playSoundManager!=null){
+            playSoundManager.release();
+        }
+    }
+
+    @Override
+    public void complete() {
+        if (playSoundManager!=null){
+            playSoundManager.release();
+        }
+        if (soundListener!=null){
+            soundListener.playComplete(this);
+        }
+        stopPlayAmin();
     }
 
     public static class Sound{

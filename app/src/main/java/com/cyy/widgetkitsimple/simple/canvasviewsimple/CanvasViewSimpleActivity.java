@@ -3,6 +3,8 @@ package com.cyy.widgetkitsimple.simple.canvasviewsimple;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 
@@ -74,5 +76,18 @@ public class CanvasViewSimpleActivity extends BaseActivity implements View.OnCli
         } else if (view.getId() == R.id.rotateRightBtn) {
             canvasView.rotate(true);
         }
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.add("ViewPager");
+        menu.add("设置");
+        return super.onCreateOptionsMenu(menu);
+
     }
 }
