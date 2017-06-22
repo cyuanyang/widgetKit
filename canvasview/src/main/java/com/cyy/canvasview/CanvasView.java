@@ -39,6 +39,7 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
     private static final boolean DEBUG = true;
 
     private static final int ROTATE_DURATION = 200;
+    private static final int ERASER_WIDTH_FACTOR = 3; //橡皮和笔的比率
 
     private ImageLoadDelegate.LoadImage mLoadImage;
     private DrawHelper drawHelper;
@@ -59,7 +60,6 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
     private float rotateAngle;//旋转的角度
     private float rotateScale;//旋转时缩放系数
     private float currentRotateSacle;//旋转时 当前的缩放系数
-
     private boolean isChanged;//true 对传入的图片做了操作
 
     //todo 意外退出数据保存
@@ -109,18 +109,18 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
         mLoadImage.loadImage(this.getContext() , url , this);
     }
 
-    @Override
-    public void imageCallback(Bitmap bitmap) {
-        if (bitmap == null){
-            throw new NullPointerException("图片下载的bitmap为空");
-        }
+    /**
+     * 设置原始的bitmap
+     * @param oBitmap 原始的bitmap
+     */
+    public void setOriginBitmap(Bitmap oBitmap){
         //清除内存
         if (originBitmap!=null && !originBitmap.isRecycled()){
             originBitmap.recycle();
             originBitmap = null;
         }
         try {
-            originBitmap = bitmap.copy(Bitmap.Config.RGB_565 , true); //原来的图片副本给这个类用
+            originBitmap = oBitmap.copy(Bitmap.Config.RGB_565 , true); //原来的图片副本给这个类用
         }catch (OutOfMemoryError e){
             Toast.makeText(getContext() , "请重新加载图片",Toast.LENGTH_SHORT).show();
             return;
@@ -129,6 +129,14 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
         initCanvas();
         invalidate();
         requestLayout();
+    }
+
+    @Override
+    public void imageCallback(Bitmap bitmap) {
+        if (bitmap == null){
+            throw new NullPointerException("图片下载的bitmap为空");
+        }
+        setOriginBitmap(bitmap);
     }
 
     private void initCanvas(){
@@ -146,9 +154,9 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
         mCanvas = new Canvas(canvasBitmap);
         easerShader = new BitmapShader(canvasBitmap.copy(Bitmap.Config.RGB_565 , true) , Shader.TileMode.REPEAT , Shader.TileMode.REPEAT);
 
-        //笔触和橡皮的宽度
+        //笔触和橡皮的宽度 根据图片的宽度来自适应涂鸦的宽度
         strokeWidth = canvasBitmap.getWidth()/150;
-        eraserWidth = strokeWidth*3;
+        eraserWidth = strokeWidth*ERASER_WIDTH_FACTOR;
         mPenPaint.setStrokeWidth(
                 TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP , strokeWidth , getResources().getDisplayMetrics()));
     }
@@ -205,6 +213,17 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
             return Math.max(viewScale , bitmapScale);
         }
 
+    }
+
+    /**
+     * 设置笔的宽度 橡皮的宽度为笔的三倍
+     * @param penWidth 单位为dp
+     */
+    public void setPenWidth(int penWidth){
+        strokeWidth = penWidth;
+        eraserWidth = strokeWidth*ERASER_WIDTH_FACTOR;
+        mPenPaint.setStrokeWidth(
+                TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP , strokeWidth , getResources().getDisplayMetrics()));
     }
 
     /**
