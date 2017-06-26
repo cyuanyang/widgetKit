@@ -37,5 +37,5 @@ dependencies {
     compile project(path: ':mathview_mathjax')
     implementation project(':slidefinishlayout')
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 }

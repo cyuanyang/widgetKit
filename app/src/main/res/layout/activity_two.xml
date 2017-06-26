@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/red"
-    tools:context="com.cyy.widgetkitsimple.simple.slidefinish.SlideFinishSimple">
+    tools:context="com.cyy.widgetkitsimple.simple.slidefinish.TwoActivity">
+
 
     <Button
         android:id="@+id/nextBtn"
         android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="go"/>
-
+        android:text="2 GO"/>
 </com.cyy.slidefinish.SlideFinishLayout>
