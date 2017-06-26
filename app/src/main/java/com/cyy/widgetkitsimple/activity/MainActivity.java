@@ -11,6 +11,7 @@ import com.cyy.widgetkitsimple.adapter.SimpleAdapter;
 import com.cyy.widgetkitsimple.base.BaseActivity;
 import com.cyy.widgetkitsimple.simple.canvasviewsimple.CanvasViewSimpleActivity;
 import com.cyy.widgetkitsimple.simple.mathview.MathViewSimple;
+import com.cyy.widgetkitsimple.simple.slidefinish.SlideFinishSimple;
 import com.cyy.widgetkitsimple.simple.soundsimple.SoundSimpleActivity;
 
 import java.util.ArrayList;
@@ -35,11 +36,13 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemClic
         listView.setOnItemClickListener(this);
     }
 
+    //初始化数据源
     private void initData(){
         datas.add(new Simple("声音", SoundSimpleActivity.class));
         datas.add(new Simple("PagerSlidingTabStrip" , null));
         datas.add(new Simple("canvas view simple" , CanvasViewSimpleActivity.class));
         datas.add(new Simple("math view simple" , MathViewSimple.class));
+        datas.add(new Simple("Slide Finish View Simple" , SlideFinishSimple.class));
     }
 
     private void initView() {
