@@ -20,5 +20,6 @@ class TwoActivity : AppCompatActivity() {
             finish()
         }
 
+
     }
 }

@@ -15,7 +15,6 @@ import kotlinx.android.synthetic.main.activity_slide_finish_simple.*
  */
 class SlideFinishSimple : AppCompatActivity() {
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_slide_finish_simple)
