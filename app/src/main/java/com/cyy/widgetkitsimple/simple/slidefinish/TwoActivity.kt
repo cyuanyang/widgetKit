@@ -15,5 +15,10 @@ class TwoActivity : AppCompatActivity() {
         nextBtn.setOnClickListener {
             startActivity(Intent(this , TwoActivity::class.java))
         }
+
+        slideFinishLayout.finishListener = {
+            finish()
+        }
+
     }
 }
