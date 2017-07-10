@@ -7,13 +7,14 @@ import android.util.Log
 import com.cyy.slidefinish.SlideFinishLayout
 import com.cyy.slidefinish.SlideFinishLayout.SlideCallback
 import com.cyy.widgetkitsimple.R
+import com.cyy.widgetkitsimple.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_slide_finish_simple.*
 
 
 /**
  * Slide finish Simple
  */
-class SlideFinishSimple : AppCompatActivity() {
+class SlideFinishSimple : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,7 +24,6 @@ class SlideFinishSimple : AppCompatActivity() {
             Log.e("TAg" , "setOnClickListener")
             startActivity(Intent(this , TwoActivity::class.java))
         }
-
     }
 
 }

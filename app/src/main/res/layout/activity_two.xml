@@ -8,7 +8,37 @@
     android:background="@color/red"
     tools:context="com.cyy.widgetkitsimple.simple.slidefinish.TwoActivity">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:text="1"
+                />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:text="1"
+                />
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:text="1"
+                />
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="800dp"
+                android:text="1"
+                />
+        </LinearLayout>
+    </ScrollView>
     <Button
         android:id="@+id/nextBtn"
         android:layout_gravity="center"

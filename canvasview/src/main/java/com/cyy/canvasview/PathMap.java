@@ -1,7 +1,9 @@
 package com.cyy.canvasview;
 
 import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.Path;
+import android.util.Log;
 
 /**
  * Created by chenyuanyang on 2017/5/28.
@@ -19,9 +21,11 @@ public class PathMap {
     private int downX , downY; //计算系数之后的按下X Y
 
     private Path paintingPath;//正在画的路径
+    private Path tempPath; //获取每一段的path 目前用于橡皮擦出 也可以做出画笔的粗细
 
     public PathMap(){
         paintingPath = new Path();
+        tempPath = new Path();
     }
 
     public void resetPathMapMatrix(Matrix matrix){
@@ -35,25 +39,33 @@ public class PathMap {
 
     public void reset(){
         paintingPath.reset();
+        tempPath.reset();
         downX = 0;
         downY = 0;
     }
 
     public PathMap moveTo(int x , int y){
+        Log.e("TAG" , "move to =" + x + " ," + y);
         paintingPath.moveTo(x , y);
+        tempPath.moveTo(x , y);
         return this;
     }
 
     public PathMap mapPath(float eventX , float eventY){
         int x = (int) ((downX+toX(eventX))/2);
         int y = (int) ((downY+toY(eventY))/2);
+        Log.e("TAG" , "quadTo = downX =" + downX + " downY =" + downY + " x="+x +" y="+y);
         paintingPath.quadTo(downX , downY , x , y );
+        tempPath.reset();
+        tempPath.moveTo(downX , downY);
+        tempPath.quadTo(downX , downY , x , y);
         return this;
     }
 
     public PathMap setDownXY(float eventX , float eventY){
         this.downX = (int) toX(eventX);
         this.downY = (int) (toY(eventY));
+        Log.e("TAG" , "setDownXY = downX =" + downX + " downY =" + downY );
         return this;
     }
 
@@ -75,5 +87,9 @@ public class PathMap {
 
     public Path getPaintingPath() {
         return paintingPath;
+    }
+
+    public Path getTempPath(){
+        return tempPath;
     }
 }

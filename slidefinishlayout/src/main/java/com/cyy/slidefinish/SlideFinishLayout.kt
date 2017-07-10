@@ -203,7 +203,8 @@ class SlideFinishLayout:FrameLayout{
             postInvalidateOnAnimation()
         }
 
-        if (mScroller.isFinished && slideState != SlideState.IDLE){
+        if (mScroller.currX == mScroller.finalX ||
+                (mScroller.isFinished && slideState != SlideState.IDLE)){
             slideState = SlideState.IDLE
             dispatchScroll(0 , left , slideState)
 

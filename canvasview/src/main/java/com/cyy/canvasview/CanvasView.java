@@ -9,6 +9,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.Point;
 import android.graphics.Shader;
 import android.os.Build;
 import android.os.Parcel;
@@ -39,20 +41,24 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
     private static final boolean DEBUG = true;
 
     private static final int ROTATE_DURATION = 200;
-    private static final int ERASER_WIDTH_FACTOR = 3; //橡皮和笔的比率
+    private static final int ERASER_WIDTH_FACTOR = 2; //橡皮和笔的比率
 
     private ImageLoadDelegate.LoadImage mLoadImage;
     private DrawHelper drawHelper;
 
     private int strokeWidth = 5; //画笔的宽度dp
-    private int eraserWidth = strokeWidth*3;//橡皮的宽度 dp;
+    private int originEraserWidth = strokeWidth*3;//橡皮的宽度 dp;
+    private int eraserWidth = originEraserWidth;
 
     private Bitmap originBitmap;//最初的bitmap
     private Bitmap canvasBitmap;//画布的bitmap
     private Canvas mCanvas;
 
     private Paint mPenPaint; //笔触的paint
+    private Paint mEraserCirclePaint;
     private BitmapShader easerShader;//橡皮擦的shader
+    private int circleColor = Color.parseColor("#8e8e8e");
+
 
     private Matrix canvasMatrix;//画布缩放的矩阵
     private boolean isPainting; //是否正在画
@@ -61,6 +67,10 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
     private float rotateScale;//旋转时缩放系数
     private float currentRotateSacle;//旋转时 当前的缩放系数
     private boolean isChanged;//true 对传入的图片做了操作
+
+    private boolean isEraser = false; //是否处于橡皮状态
+
+    private Tracker mTracker;
 
     //todo 意外退出数据保存
     static class SaveState extends BaseSavedState{
@@ -95,8 +105,15 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
         mPenPaint.setStrokeWidth(w);
         mPenPaint.setColor(Color.RED);
 
+        mEraserCirclePaint = new Paint();
+        mEraserCirclePaint.setAntiAlias(true);
+        mEraserCirclePaint.setStyle(Paint.Style.STROKE);
+        mEraserCirclePaint.setColor(circleColor);
+
         mPathMap = new PathMap();
         canvasMatrix = new Matrix();
+
+        mTracker = new Tracker(getContext());
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -156,7 +173,7 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
 
         //笔触和橡皮的宽度 根据图片的宽度来自适应涂鸦的宽度
         strokeWidth = canvasBitmap.getWidth()/150;
-        eraserWidth = strokeWidth*ERASER_WIDTH_FACTOR;
+        originEraserWidth = strokeWidth*ERASER_WIDTH_FACTOR;
         mPenPaint.setStrokeWidth(
                 TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP , strokeWidth , getResources().getDisplayMetrics()));
     }
@@ -221,7 +238,7 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
      */
     public void setPenWidth(int penWidth){
         strokeWidth = penWidth;
-        eraserWidth = strokeWidth*ERASER_WIDTH_FACTOR;
+        originEraserWidth = strokeWidth*ERASER_WIDTH_FACTOR;
         mPenPaint.setStrokeWidth(
                 TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP , strokeWidth , getResources().getDisplayMetrics()));
     }
@@ -233,6 +250,12 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
         mPenPaint.setStrokeWidth(
                 TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP , eraserWidth , getResources().getDisplayMetrics()));
         mPenPaint.setShader(easerShader);
+        isEraser = true;
+    }
+
+    private void setEraserWidth(int width){
+        mPenPaint.setStrokeWidth(
+                TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP , width , getResources().getDisplayMetrics()));
     }
 
     /**
@@ -249,6 +272,7 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
         mPenPaint.setStrokeWidth(
                 TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP , strokeWidth , getResources().getDisplayMetrics()));
         mPenPaint.setShader(null);
+        isEraser = false;
     }
 
     /**
@@ -294,11 +318,42 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
         set.start();
     }
 
+    /**
+     * 画橡皮
+     * @param canvas
+     */
+    private void drawEraser(Canvas canvas){
+        float w = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP , 2 , getResources().getDisplayMetrics());
+        mEraserCirclePaint.setStrokeWidth(w);
+        float radius = mPenPaint.getStrokeWidth();
+        canvas.drawCircle(mPathMap.downX() , mPathMap.downY() , radius , mEraserCirclePaint);
+
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
+
+//        Paint paint= new Paint();
+//        paint.setColor(Color.RED);
+//        paint.setStrokeWidth(10);
+//        paint.setStyle(Paint.Style.STROKE);
+//        paint.setAntiAlias(true);
+//        paint.setStrokeCap(Paint.Cap.ROUND);
+//
+//        Path path = new Path();
+//        path.moveTo(500,500);
+//
+//        Point startPoint = new Point(100 , 500);
+//        Point endPoint = new Point(200 , 300);
+//        path.quadTo(startPoint.x, startPoint.y, endPoint.x, endPoint.y);
+//        canvas.drawPath(path , paint);
+//
+//        canvas.drawCircle(500,500 , 10 , paint);
+//        canvas.drawCircle(startPoint.x,startPoint.y , 5 , paint);
+//        canvas.drawCircle(endPoint.x,endPoint.y , 5 , paint);
+
         int count = canvas.save();
         if (canvasBitmap!=null){
-
             float[] values = new float[9];
             canvasMatrix.getValues(values);
             Log.i("scale" , "scale="+values[Matrix.MSCALE_X]);
@@ -308,7 +363,12 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
             canvas.drawBitmap(canvasBitmap , 0 , 0 , null);
         }
         if (isPainting){
-            canvas.drawPath(mPathMap.getPaintingPath() , mPenPaint);
+
+            if (isEraser){
+                drawEraser(canvas);
+            }else {
+                canvas.drawPath(mPathMap.getPaintingPath() , mPenPaint);
+            }
         }
         canvas.restoreToCount(count);
     }
@@ -329,6 +389,11 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+
+        if (isEraser){
+            mTracker.initVelocityTrackerIfNotExists(event);
+        }
+
         if (originBitmap==null){
             return true;
         }
@@ -342,8 +407,17 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
                 break;
 
             case MotionEvent.ACTION_MOVE:
-                mPathMap.mapPath(event.getX() , event.getY())
-                        .setDownXY(event.getX() , event.getY());
+                float x = event.getX();
+                float y = event.getY();
+                mPathMap.mapPath(x , y)
+                        .setDownXY(x , y);
+                if (isEraser){
+                    //获取速率
+                    int vel = mTracker.velocity();
+                    eraserWidth = originEraserWidth + vel/100;
+                    setEraserWidth(eraserWidth);
+                    mCanvas.drawPath(mPathMap.getTempPath() , mPenPaint);
+                }
                 invalidate();
                 break;
 
@@ -353,6 +427,11 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
                 //将路径花到画布上
                 mCanvas.drawPath(mPathMap.getPaintingPath() , mPenPaint);
                 isChanged = true;
+                invalidate();
+                if (isEraser){
+                    mTracker.recycleVelocityTracker();
+                }
+                eraserWidth = originEraserWidth;
                 break;
         }
         return true;
