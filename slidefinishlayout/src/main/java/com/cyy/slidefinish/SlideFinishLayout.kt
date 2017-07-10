@@ -34,11 +34,12 @@ class SlideFinishLayout:FrameLayout{
         SETTLING//fling
     }
 
+    var isDebug:Boolean = true
     internal val TAG:String = "SlideFinishLayout"
     private val FACTOR:Float = 0.2f //px 最小滑动的距离的因数 屏幕的最大宽度*factor
-    private var screenWidth:Int
+    private var screenWidth:Int = context.resources.displayMetrics.widthPixels
 
-    private var mScroller:OverScroller
+    private var mScroller:OverScroller = OverScroller(context)
     private var mIsDrag:Boolean = false
     private var mLastX:Int = 0
     private var mTouchSlop:Int = 0
@@ -56,10 +57,6 @@ class SlideFinishLayout:FrameLayout{
     var finishListener:((SlideFinishLayout)->Unit)? = null
 
     init {
-        Log.e(TAG , "init")
-        mScroller = OverScroller(context)
-        screenWidth = context.resources.displayMetrics.widthPixels
-
         val viewConfig:ViewConfiguration = ViewConfiguration.get(context)
         mTouchSlop = viewConfig.scaledTouchSlop
         mMaximumVelocity = viewConfig.scaledMaximumFlingVelocity.toFloat()
@@ -107,10 +104,12 @@ class SlideFinishLayout:FrameLayout{
     override fun onTouchEvent(event: MotionEvent): Boolean {
 
         val action = event.action
+        //1.初始化轨迹
         initVelocityTrackerIfNotExists(event)
 
         when(action){
             MotionEvent.ACTION_DOWN -> {
+                //2.down 事件 mScroller放弃动画 记录触摸的位置
                 if (!mScroller.isFinished){
                     mScroller.abortAnimation()
                 }
@@ -120,15 +119,18 @@ class SlideFinishLayout:FrameLayout{
                 dispatchScroll(0 , 0 , slideState)
             }
             MotionEvent.ACTION_MOVE -> {
+                //3.move事件调用performDrag()方法 会调用offsetLeftAndRight() 从而移动View
                 val currentX = event.rawX.toInt()
                 val deltaX = currentX - mLastX
-                Log.e(TAG, "x = ${event.rawX} y = ${event.rawX}")
+                log("x = ${event.rawX} y = ${event.rawX}")
                 performDrag(deltaX)
-                Log.e(TAG , "deltaX = $deltaX")
+                log("deltaX = $deltaX")
                 mLastX = currentX
             }
             MotionEvent.ACTION_UP,
             MotionEvent.ACTION_CANCEL ->{
+                //4.up事件 主要处理手指离开后的View的滚动,以及是否要达到销毁的条件
+                //endDrag()方法会处理手指离开后的动画以及是否达到销毁条件
                 if (mIsDrag){
                     mLastX = 0
                     mIsDrag = false
@@ -176,8 +178,8 @@ class SlideFinishLayout:FrameLayout{
 
         slideState = SlideState.SETTLING
         val left = this.left
-        Log.e(TAG , "left = $left  screenWidth * FACTOR= ${screenWidth * FACTOR}")
-        Log.e(TAG , "xVelocity = $xVelocity mMinimumVelocity= $mMinimumVelocity")
+        log( "left = $left  screenWidth * FACTOR= ${screenWidth * FACTOR}")
+        log( "xVelocity = $xVelocity mMinimumVelocity= $mMinimumVelocity")
         if (Math.abs(left) > screenWidth * FACTOR
                 || xVelocity > mMinimumVelocity){
             if (left>0){
@@ -196,7 +198,7 @@ class SlideFinishLayout:FrameLayout{
 
     override fun computeScroll() {
         if (mScroller.computeScrollOffset()){
-            Log.e(TAG , "currX ${mScroller.currX}")
+            log("currX ${mScroller.currX}")
             val offsetX = mScroller.currX-left
             offsetLeftAndRight(offsetX)
             dispatchScroll(offsetX , mScroller.currX , slideState)
@@ -218,6 +220,12 @@ class SlideFinishLayout:FrameLayout{
     //分发 滚动
     fun dispatchScroll(deltaX:Int , currentX:Int , state:SlideState){
         slideListener?.onSliding(deltaX , currentX , state)
+    }
+
+    private fun log(msg:String){
+        if (isDebug){
+            Log.e(TAG , msg)
+        }
     }
 
 }
