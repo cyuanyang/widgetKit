@@ -10,7 +10,6 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.Point;
 import android.graphics.Shader;
 import android.os.Build;
 import android.os.Parcel;
@@ -67,6 +66,7 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
     private float rotateScale;//旋转时缩放系数
     private float currentRotateSacle;//旋转时 当前的缩放系数
     private boolean isChanged;//true 对传入的图片做了操作
+    private HistoryPath historyPath;//记录历史记录的操作
 
     private boolean isEraser = false; //是否处于橡皮状态
 
@@ -114,6 +114,7 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
         canvasMatrix = new Matrix();
 
         mTracker = new Tracker(getContext());
+        historyPath = new HistoryPath();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -143,7 +144,7 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
             return;
         }
 
-        initCanvas();
+        initCanvasShader();
         invalidate();
         requestLayout();
     }
@@ -154,6 +155,17 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
             throw new NullPointerException("图片下载的bitmap为空");
         }
         setOriginBitmap(bitmap);
+    }
+
+    private void initCanvasShader(){
+        initCanvas();
+        easerShader = new BitmapShader(canvasBitmap.copy(Bitmap.Config.RGB_565 , true) , Shader.TileMode.REPEAT , Shader.TileMode.REPEAT);
+
+        //笔触和橡皮的宽度 根据图片的宽度来自适应涂鸦的宽度
+        strokeWidth = canvasBitmap.getWidth()/150;
+        eraserWidth = strokeWidth*ERASER_WIDTH_FACTOR;
+        mPenPaint.setStrokeWidth(
+                TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP , strokeWidth , getResources().getDisplayMetrics()));
     }
 
     private void initCanvas(){
@@ -425,7 +437,9 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
             case MotionEvent.ACTION_UP:
                 isPainting = false;
                 //将路径花到画布上
-                mCanvas.drawPath(mPathMap.getPaintingPath() , mPenPaint);
+                Path path = mPathMap.getPaintingPath();
+                historyPath.addPath(path);
+                mCanvas.drawPath(path , mPenPaint);
                 isChanged = true;
                 invalidate();
                 if (isEraser){
@@ -435,6 +449,21 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
                 break;
         }
         return true;
+    }
+
+    public boolean isHasPre(){
+        return !historyPath.isEmpty();
+    }
+
+    /**
+     * 上一步
+     */
+    public void pre(){
+        if (isHasPre()){
+            initCanvas();
+            mCanvas.drawPath(historyPath.getPrePath() , mPenPaint);
+            invalidate();
+        }
     }
 
     public Bitmap getResultBitmap(){

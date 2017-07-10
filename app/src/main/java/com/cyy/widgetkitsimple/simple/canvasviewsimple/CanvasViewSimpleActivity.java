@@ -23,6 +23,8 @@ public class CanvasViewSimpleActivity extends BaseActivity implements View.OnCli
     protected Button eraserView;
     protected Button rotateLeftBtn;
     protected Button rotateRightBtn;
+    protected Button preBtn;
+    protected Button nextBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +65,10 @@ public class CanvasViewSimpleActivity extends BaseActivity implements View.OnCli
         rotateLeftBtn.setOnClickListener(CanvasViewSimpleActivity.this);
         rotateRightBtn = (Button) findViewById(R.id.rotateRightBtn);
         rotateRightBtn.setOnClickListener(CanvasViewSimpleActivity.this);
+        preBtn = (Button) findViewById(R.id.preBtn);
+        preBtn.setOnClickListener(CanvasViewSimpleActivity.this);
+        nextBtn = (Button) findViewById(R.id.nextBtn);
+        nextBtn.setOnClickListener(CanvasViewSimpleActivity.this);
     }
 
     @Override
@@ -75,6 +81,10 @@ public class CanvasViewSimpleActivity extends BaseActivity implements View.OnCli
             canvasView.rotate(false);
         } else if (view.getId() == R.id.rotateRightBtn) {
             canvasView.rotate(true);
+        } else if (view.getId() == R.id.preBtn) {
+            canvasView.pre();
+        } else if (view.getId() == R.id.nextBtn) {
+
         }
     }
 
