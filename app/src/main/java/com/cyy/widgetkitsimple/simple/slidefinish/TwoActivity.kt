@@ -1,9 +1,9 @@
 package com.cyy.widgetkitsimple.simple.slidefinish
 
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import com.cyy.slidefinish.Slide
 import com.cyy.widgetkitsimple.R
 import com.cyy.widgetkitsimple.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_two.*
@@ -30,6 +30,7 @@ class TwoActivity : BaseActivity() {
     override fun onPause() {
         super.onPause()
         Log.e(" TwoActivity" , "onPause")
+
     }
 
     override fun onResume() {

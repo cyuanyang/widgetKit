@@ -101,18 +101,31 @@ public class MathView extends WebView {
     public static class BaseJSInterface{
 
         private MathView mathView;
+        private MyRunnable runnable = new MyRunnable();
+
         public BaseJSInterface(MathView mathView){
             this.mathView = mathView;
         }
 
         @JavascriptInterface
         public void mathCallback(final int status){
-            mathView.post(new Runnable() {
-                @Override
-                public void run() {
+            runnable.status = status;
+            mathView.post(runnable);
+        }
+
+        class MyRunnable implements Runnable {
+            public int status = -1;
+            @Override
+            public void run() {
+                if (mathView!=null)
                     mathView.renderStatus(status);
-                }
-            });
+            }
+        }
+
+        public void destory(){
+            mathView.removeCallbacks(runnable);
+            runnable = null;
+            mathView = null;
         }
     }
 }

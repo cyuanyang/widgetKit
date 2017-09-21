@@ -2,6 +2,7 @@ package com.cyy.widgetkitsimple.base;
 
 import android.app.Application;
 
+import com.cyy.slidefinish.Slide;
 import com.cyy.sound.WidgetKit;
 
 /**
@@ -15,5 +16,7 @@ public class App extends Application {
         super.onCreate();
 
         WidgetKit.getWidgetKit().init(this);
+
+        Slide.Companion.getInstance().init(this);
     }
 }

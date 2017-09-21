@@ -6,15 +6,41 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/red"
+    android:orientation="vertical"
     tools:context="com.cyy.widgetkitsimple.simple.slidefinish.TwoActivity">
+
+    <LinearLayout
+        android:id="@+id/bar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="vertical"
+        android:gravity="center_vertical"
+        android:background="@color/colorPrimary">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1234567890"
+            android:layout_marginLeft="15dp"
+            android:textSize="17sp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            />
+    </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
+
+            <Button
+                android:id="@+id/nextBtn"
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:text="GO ACTIVITY"/>
 
             <Button
                 android:layout_width="match_parent"
@@ -35,14 +61,27 @@
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="800dp"
-                android:text="1"
+                android:text="6"
+                >
+                <requestFocus/>
+            </Button>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:text="5"
                 />
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:text="4"
+                />
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="800dp"
+                android:text="2">
+
+            </Button>
+
         </LinearLayout>
     </ScrollView>
-    <Button
-        android:id="@+id/nextBtn"
-        android:layout_gravity="center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="2 GO"/>
 </com.cyy.slidefinish.SlideFinishLayout>

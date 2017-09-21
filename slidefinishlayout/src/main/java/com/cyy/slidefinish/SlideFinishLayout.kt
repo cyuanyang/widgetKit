@@ -3,18 +3,17 @@ package com.cyy.slidefinish
 import android.content.Context
 import android.util.AttributeSet
 import android.util.Log
-import android.view.MotionEvent
-import android.view.VelocityTracker
-import android.view.ViewConfiguration
-import android.widget.FrameLayout
+import android.view.*
+import android.widget.LinearLayout
 import android.widget.OverScroller
+
 
 /**
  * Created by study on 17/6/26.
  *
  * Slide Finish Layout
  */
-class SlideFinishLayout:FrameLayout{
+class SlideFinishLayout:LinearLayout{
 
     interface SlideCallback{
         fun onSliding(deltaX:Int , currentX:Int , state:SlideState) //滑动监听
@@ -34,6 +33,10 @@ class SlideFinishLayout:FrameLayout{
         SETTLING//fling
     }
 
+    companion object{
+        val tag = "SlideFinishLayout"
+    }
+
     var isDebug:Boolean = true
     internal val TAG:String = "SlideFinishLayout"
     private val FACTOR:Float = 0.2f //px 最小滑动的距离的因数 屏幕的最大宽度*factor
@@ -48,6 +51,10 @@ class SlideFinishLayout:FrameLayout{
     private var velocityTracker:VelocityTracker?
     private var mMaximumVelocity:Float
     private var mMinimumVelocity:Float
+    internal var delegate:SlideDelegate? = null
+    internal var parallaxView:SlideFinishLayout? = null
+
+    var parallax = true
 
     var slideModel:DirectionModel = DirectionModel.LEFT_AND_RIGHT //滑动模式
     //滑动的状态
@@ -56,17 +63,40 @@ class SlideFinishLayout:FrameLayout{
     var slideListener:SlideCallback? = null
     var finishListener:((SlideFinishLayout)->Unit)? = null
 
+    constructor(context: Context?) : super(context)
+    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
+    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+
     init {
         val viewConfig:ViewConfiguration = ViewConfiguration.get(context)
         mTouchSlop = viewConfig.scaledTouchSlop
         mMaximumVelocity = viewConfig.scaledMaximumFlingVelocity.toFloat()
         mMinimumVelocity = viewConfig.scaledMinimumFlingVelocity.toFloat()
         velocityTracker = null
+
+        tag = SlideFinishLayout.tag
     }
 
-    constructor(context: Context?) : super(context)
-    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+
+    /**
+     * 开始视差的时候寻找parallax view
+     */
+    private fun findDesView(){
+        if (parallax){
+            //如果没有id设置一个id
+        }
+    }
+
+    override fun setTag(tag: Any?) {
+        tag?.let {
+            if (it is String && it != SlideFinishLayout.tag){
+                //setTag(int key, final Object tag)
+                Log.e("SlideFinishLayout" , " 不要占用这个tag")
+                return
+            }
+        }
+        super.setTag(tag)
+    }
 
     override fun onInterceptTouchEvent(ev: MotionEvent): Boolean {
         val action = ev.action
@@ -83,6 +113,12 @@ class SlideFinishLayout:FrameLayout{
                 if (deltaY >= mTouchSlop){
                     mIsDrag = true
                 }
+            }
+        }
+        if (mIsDrag){
+            parallaxView?.let {
+                var offset = -it.width/2
+                it.translationX = offset.toFloat()
             }
         }
         return mIsDrag
@@ -145,6 +181,14 @@ class SlideFinishLayout:FrameLayout{
             }
         }
         return true
+    }
+
+    override fun onWindowVisibilityChanged(visibility: Int) {
+        super.onWindowVisibilityChanged(visibility)
+    }
+
+    override fun onApplyWindowInsets(insets: WindowInsets?): WindowInsets {
+        return super.onApplyWindowInsets(insets)
     }
 
     //开始拖动
@@ -218,8 +262,18 @@ class SlideFinishLayout:FrameLayout{
     }
 
     //分发 滚动
-    fun dispatchScroll(deltaX:Int , currentX:Int , state:SlideState){
+    private fun dispatchScroll(deltaX:Int , currentX:Int , state:SlideState){
+        parallax(deltaX , currentX , state)
+
         slideListener?.onSliding(deltaX , currentX , state)
+    }
+
+    //视差滚动
+    private fun parallax(deltaX:Int , currentX:Int , state:SlideState){
+        //得到上一个activity中的这个View 做相对滑动
+        log("this =$this  parallaxView = $parallaxView")
+        log("current x = $currentX")
+        parallaxView?.performDrag(deltaX/2)
     }
 
     private fun log(msg:String){
@@ -227,7 +281,6 @@ class SlideFinishLayout:FrameLayout{
             Log.e(TAG , msg)
         }
     }
-
 }
 
 

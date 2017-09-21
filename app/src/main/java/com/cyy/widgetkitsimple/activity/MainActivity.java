@@ -36,6 +36,11 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemClic
         listView.setOnItemClickListener(this);
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
     //初始化数据源
     private void initData(){
         datas.add(new Simple("声音", SoundSimpleActivity.class));
