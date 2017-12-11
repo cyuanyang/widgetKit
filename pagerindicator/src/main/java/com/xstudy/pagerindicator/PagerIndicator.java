@@ -68,8 +68,8 @@ public class PagerIndicator extends HorizontalScrollView{
     }
 
     private void init(){
-        itemMargin = (int) dp2px(50);
-        itemSpace = (int) dp2px(10);
+        itemMargin = (int) dp2px(10);
+        itemSpace = (int) dp2px(40);
         titleSize = 16;
         titleColor = Color.parseColor("#999999");
         titleSelectedColor = Color.BLACK;
@@ -111,8 +111,7 @@ public class PagerIndicator extends HorizontalScrollView{
     }
 
     private void initIndicateView(){
-        indicateView = new IndicatorView(getContext() , indicatorDrawable , indicatorWidth);
-//        indicateView.setBackgroundResource(indicatorDrawable);
+        indicateView = new IndicatorView(getContext() , indicatorDrawable ,indicatorWidth);
         LayoutParams lp = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 indicateHeight);
         lp.gravity = Gravity.BOTTOM;
@@ -130,7 +129,7 @@ public class PagerIndicator extends HorizontalScrollView{
             int right = view.getRight();
 
             int offset = (left+right)/2;
-            indicateView.update(offset , indicateView.getMeasuredHeight());
+            indicateView.update(offset);
         }
     }
 
@@ -152,9 +151,7 @@ public class PagerIndicator extends HorizontalScrollView{
 
         indicator.selectTitle(preViewBean == null ? null : preViewBean.view , currentViewBean.view , titleColor , titleSelectedColor);
         int offset = (currentViewBean.view.getLeft()+currentViewBean.view.getRight())/2;
-        indicateView.update(offset , indicateHeight);
-//        //指示view 切换
-//        indicateView.requestLayout();
+        indicateView.update(offset);
     }
 
     public void setListener(OnItemClickListener l) {
