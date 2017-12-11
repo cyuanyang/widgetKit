@@ -26,6 +26,7 @@
         <activity android:name=".simple.slidefinish.SlideFinishSimple" />
         <activity android:name=".simple.slidefinish.TwoActivity"
             android:theme="@style/AppTheme.Transparent"/>
+        <activity android:name=".simple.pagerindicator.PagerIndicatorSimple"/>
     </application>
 
 </manifest>
