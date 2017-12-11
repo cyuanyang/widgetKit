@@ -15,7 +15,7 @@ import com.xstudy.pagerindicator.PagerIndicator;
 /**
  * Created by cyy on 17/12/11.
  * <p>
- * Pager Indicator
+ * Pager IndicatorInternal
  */
 
 public class PagerIndicatorSimple extends FragmentActivity {

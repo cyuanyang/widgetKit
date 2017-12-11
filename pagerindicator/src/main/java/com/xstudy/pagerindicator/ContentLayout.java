@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 /**
  * Created by study on 17/12/11.
@@ -18,7 +19,10 @@ import android.widget.FrameLayout;
 
 class ContentLayout extends FrameLayout {
 
-    boolean overlap; //
+    boolean overlap = false; //
+
+    private View indicatorView;
+    private View contentView;
 
     public ContentLayout(@NonNull Context context) {
         super(context);
@@ -26,17 +30,26 @@ class ContentLayout extends FrameLayout {
 
     public void addView(View child, int index, ViewGroup.LayoutParams params) {
         super.addView(child , index , params);
-
+        if (getChildCount() > 2){
+            throw new IllegalStateException("不允许添加View");
+        }
+        if (child instanceof LinearLayout){
+            contentView = child;
+        }else {
+            indicatorView = child;
+        }
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        if (overlap){
+        if (!overlap){
             //覆盖
-
-        }else {
-
+            //重新设置ContentView的高度
+            int height = MeasureSpec.getSize(heightMeasureSpec);
+            int model = MeasureSpec.getMode(heightMeasureSpec);
+            contentView.measure(widthMeasureSpec ,
+                    MeasureSpec.makeMeasureSpec(height-indicatorView.getMeasuredHeight() , model) );
         }
     }
 
