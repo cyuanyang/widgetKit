@@ -5,12 +5,9 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
 import android.support.v4.app.ActivityCompat;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewTreeObserver;
 
 /**
  * Created by study on 17/12/11.
@@ -40,7 +37,12 @@ public class IndicatorView extends View {
         }else {
             drawable.setBounds(offset - indicatorWidth/2 , 0 ,
                     offset + indicatorWidth/2 , getHeight());
-            invalidate();
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                postInvalidateOnAnimation();
+            }else {
+                invalidate();
+            }
         }
     }
 

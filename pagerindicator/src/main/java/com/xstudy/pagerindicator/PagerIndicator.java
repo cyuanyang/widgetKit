@@ -9,6 +9,7 @@ import android.support.annotation.DrawableRes;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -45,6 +46,8 @@ public class PagerIndicator extends HorizontalScrollView{
     private int indicatorWidth;
     private @DrawableRes int indicatorDrawable;
 
+    private float ratioGlue = 0.5f; //指示粘合的位置 0.5 表示在屏幕的中间
+
     private List<ViewBean> viewBeans = new ArrayList<>();
     private ContentLayout contentLayout; //滑动的内容View
     private LinearLayout contentView; // title 的content view
@@ -76,6 +79,8 @@ public class PagerIndicator extends HorizontalScrollView{
         indicateHeight = (int) dp2px(10);
         indicatorWidth = (int) dp2px(30);
         indicatorDrawable = R.drawable.indicator_drawable;
+
+        setHorizontalScrollBarEnabled(false);
     }
 
     @Override
@@ -137,6 +142,15 @@ public class PagerIndicator extends HorizontalScrollView{
         //切换viewpager
         viewPager.setCurrentItem(index);
 
+        changeIndicator(index);
+
+        //滑动
+        int scrollTo = (int) (currentViewBean.view.getLeft() - getWidth() * ratioGlue + currentViewBean.view.getWidth()/2);
+        smoothScrollTo(scrollTo ,0);
+
+    }
+
+    private void changeIndicator(int index){
         //改变指示
         ViewBean preViewBean = currentViewBean;
         if (preViewBean!=null){
