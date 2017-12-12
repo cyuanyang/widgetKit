@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.DrawableRes;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.view.View;
 
 /**
@@ -20,6 +21,8 @@ public class IndicatorView extends View {
     private Drawable drawable;
     private int indicatorWidth;
     private int offset;
+
+    private Rect currentRect = new Rect();
 
     private boolean drawableNeedUpdate = false;
     private boolean isLayout;
@@ -46,6 +49,30 @@ public class IndicatorView extends View {
         }
     }
 
+    public void pageScrolled(int toOffset , float positionOffset){
+        Log.e("111111" , "toOffset = " + toOffset);
+        if (currentRect.isEmpty()){
+            currentRect = drawable.getBounds();
+        }
+        if (toOffset > currentRect.left){
+            int offset = (int) ((toOffset + indicatorWidth/2 - currentRect.right)*positionOffset);
+            Log.e("111111" , "offset = " + offset);
+            drawable.setBounds(currentRect.left , currentRect.top ,currentRect.right + offset , currentRect.bottom);
+        }else {
+
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            postInvalidateOnAnimation();
+        }else {
+            invalidate();
+        }
+    }
+
+    public void pageScrolledEnd(){
+        currentRect.setEmpty();
+    }
+
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
@@ -67,5 +94,6 @@ public class IndicatorView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         drawable.draw(canvas);
+        Log.e("2222" , drawable.getBounds()+"");
     }
 }

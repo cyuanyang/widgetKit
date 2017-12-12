@@ -21,6 +21,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.widget.AbsListView.OnScrollListener.SCROLL_STATE_IDLE;
+
 /**
  * Created by study on 17/11/28.
  *
@@ -147,7 +149,33 @@ public class PagerIndicator extends HorizontalScrollView{
         //滑动
         int scrollTo = (int) (currentViewBean.view.getLeft() - getWidth() * ratioGlue + currentViewBean.view.getWidth()/2);
         smoothScrollTo(scrollTo ,0);
+    }
 
+    public void pageScrolledEnd(){
+        indicateView.pageScrolledEnd();
+    }
+
+    private void pageScrolled(int toOffset , float positionOffset){
+        indicateView.pageScrolled(toOffset , positionOffset);
+    }
+
+    /**
+     * 寻找指示的下一个最左边的rect
+     * @param position
+     * @param positionOffset
+     * @return
+     */
+    private int findIndicatorNextLeftOffset(int position , float positionOffset){
+        int pos = position;
+        if (pos == currentViewBean.index){
+            //向右滑动
+            pos += 1;
+        }
+        ViewBean next = viewBeans.get(pos);
+        int toOffset = next.view.getLeft() + next.view.getWidth()/2;
+
+        Log.e(TAG , "to = "+ toOffset);
+        return toOffset;
     }
 
     private void changeIndicator(int index){
@@ -237,18 +265,41 @@ public class PagerIndicator extends HorizontalScrollView{
 
     class PageChangedListener extends ViewPager.SimpleOnPageChangeListener{
 
+        private boolean isNeedFindNext = true;
+        private Rect toRect;
+
         @Override
         public void onPageSelected(int position) {
             super.onPageSelected(position);
             select(position);
+            Log.e("onPageSelected" ,"onPageSelected");
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+            super.onPageScrollStateChanged(state);
+            if (state != SCROLL_STATE_IDLE ){
+//                findIndicatorNextLeftOffset()
+            }
         }
 
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+//            if (positionOffset>0){
+//                if (isNeedFindNext){
+//                    isNeedFindNext = false;
+//                    toOffset = findNextOffset(position , positionOffset);
+//                }else {
+//                    //
+//                    Log.e(TAG , "toOffset =" + toOffset);
+//
+//                    pageScrolled(toOffset , positionOffset );
+//                }
+//            }
 
 
-
+            Log.e("onPageScrolled" , " position = " +position + " positionOffset="+positionOffset +" positionOffsetPixels="+positionOffsetPixels);
         }
     }
 
