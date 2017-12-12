@@ -162,10 +162,9 @@ public class PagerIndicator extends HorizontalScrollView{
     /**
      * 寻找指示的下一个最左边的rect
      * @param position
-     * @param positionOffset
      * @return
      */
-    private int findIndicatorNextLeftOffset(int position , float positionOffset){
+    private int findIndicatorNextLeftOffset(int position){
         int pos = position;
         if (pos == currentViewBean.index){
             //向右滑动
@@ -179,7 +178,7 @@ public class PagerIndicator extends HorizontalScrollView{
     }
 
     private void changeIndicator(int index){
-        //改变指示
+        //改变title
         ViewBean preViewBean = currentViewBean;
         if (preViewBean!=null){
             if (index == preViewBean.index){
@@ -192,8 +191,10 @@ public class PagerIndicator extends HorizontalScrollView{
         currentViewBean.isSelected = true;
 
         indicator.selectTitle(preViewBean == null ? null : preViewBean.view , currentViewBean.view , titleColor , titleSelectedColor);
-        int offset = (currentViewBean.view.getLeft()+currentViewBean.view.getRight())/2;
-        indicateView.update(offset);
+
+
+//        int offset = (currentViewBean.view.getLeft()+currentViewBean.view.getRight())/2;
+//        indicateView.update(offset);
     }
 
     public void setListener(OnItemClickListener l) {
@@ -268,6 +269,7 @@ public class PagerIndicator extends HorizontalScrollView{
         private boolean isNeedFindNext = true;
         private Rect toRect;
 
+        private ViewBean preViewBean;
         @Override
         public void onPageSelected(int position) {
             super.onPageSelected(position);
@@ -278,14 +280,33 @@ public class PagerIndicator extends HorizontalScrollView{
         @Override
         public void onPageScrollStateChanged(int state) {
             super.onPageScrollStateChanged(state);
-            if (state != SCROLL_STATE_IDLE ){
-//                findIndicatorNextLeftOffset()
+            if (state != ViewPager.SCROLL_STATE_IDLE ){
+                preViewBean = currentViewBean;
             }
         }
 
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+
+            int nextLeft = 0;
+            if (preViewBean == currentViewBean){
+                //滑动
+                if (position == preViewBean.index){
+                    //右
+                    nextLeft = findIndicatorNextLeftOffset(++position);
+                }else {
+                    //左
+                    nextLeft = findIndicatorNextLeftOffset(position);
+                }
+            }else {
+                //点击
+
+
+            }
+
+            Log.e(TAG ,"next left = " +nextLeft);
+
 //            if (positionOffset>0){
 //                if (isNeedFindNext){
 //                    isNeedFindNext = false;
@@ -297,7 +318,6 @@ public class PagerIndicator extends HorizontalScrollView{
 //                    pageScrolled(toOffset , positionOffset );
 //                }
 //            }
-
 
             Log.e("onPageScrolled" , " position = " +position + " positionOffset="+positionOffset +" positionOffsetPixels="+positionOffsetPixels);
         }
