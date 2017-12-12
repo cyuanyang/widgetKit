@@ -155,8 +155,13 @@ public class PagerIndicator extends HorizontalScrollView{
         indicateView.pageScrolledEnd();
     }
 
-    private void pageScrolled(int toOffset , float positionOffset){
-        indicateView.pageScrolled(toOffset , positionOffset);
+    /**
+     * @param offset  要滑动到下一个title的中心位置
+     * @param positionOffset 百分比
+     */
+    private void pageScrolled(int offset , float positionOffset){
+
+        indicateView.pageScrolled(offset , positionOffset);
     }
 
     /**
@@ -164,17 +169,13 @@ public class PagerIndicator extends HorizontalScrollView{
      * @param position
      * @return
      */
-    private int findIndicatorNextLeftOffset(int position){
-        int pos = position;
-        if (pos == currentViewBean.index){
-            //向右滑动
-            pos += 1;
+    private int findIndicatorNextOffset(int position){
+        if (position >= viewBeans.size()){
+            return 0;
         }
-        ViewBean next = viewBeans.get(pos);
-        int toOffset = next.view.getLeft() + next.view.getWidth()/2;
-
-        Log.e(TAG , "to = "+ toOffset);
-        return toOffset;
+        ViewBean next = viewBeans.get(position);
+        int offset = next.view.getLeft() + next.view.getWidth()/2;
+        return offset;
     }
 
     private void changeIndicator(int index){
@@ -267,7 +268,11 @@ public class PagerIndicator extends HorizontalScrollView{
     class PageChangedListener extends ViewPager.SimpleOnPageChangeListener{
 
         private boolean isNeedFindNext = true;
-        private Rect toRect;
+        private int offset;
+        private int nextIndex;
+        private int state = ViewPager.SCROLL_STATE_IDLE;
+
+        private int prePosition = -1;
 
         private ViewBean preViewBean;
         @Override
@@ -282,42 +287,49 @@ public class PagerIndicator extends HorizontalScrollView{
             super.onPageScrollStateChanged(state);
             if (state != ViewPager.SCROLL_STATE_IDLE ){
                 preViewBean = currentViewBean;
+            }else {
+                isNeedFindNext = true;
+                prePosition = -1;
+                offset = 0;
+                pageScrolledEnd();
             }
+            this.state = state;
         }
 
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             super.onPageScrolled(position, positionOffset, positionOffsetPixels);
-
-            int nextLeft = 0;
-            if (preViewBean == currentViewBean){
-                //滑动
-                if (position == preViewBean.index){
-                    //右
-                    nextLeft = findIndicatorNextLeftOffset(++position);
+            //寻找要去的view的左边的位置
+            if (isNeedFindNext && state != ViewPager.SCROLL_STATE_IDLE){
+                offset = 0;
+                isNeedFindNext = false;
+                if (preViewBean == currentViewBean){
+                    //滑动
+                    if (position == preViewBean.index){
+                        //右
+                        offset = findIndicatorNextOffset(position+1);
+                    }else {
+                        //左
+                        offset = findIndicatorNextOffset(position);
+                    }
                 }else {
-                    //左
-                    nextLeft = findIndicatorNextLeftOffset(position);
+                    //点击
+                    offset = findIndicatorNextOffset(currentViewBean.index);
                 }
-            }else {
-                //点击
 
+                Log.e(TAG ,"next offset = " +offset);
 
             }
 
-            Log.e(TAG ,"next left = " +nextLeft);
+            if (state != ViewPager.SCROLL_STATE_IDLE){
+                if (prePosition== -1 || prePosition == position){
+                    if (offset!=0){
+                        pageScrolled(offset , positionOffset);
+                    }
+                }
+                prePosition = position;
+            }
 
-//            if (positionOffset>0){
-//                if (isNeedFindNext){
-//                    isNeedFindNext = false;
-//                    toOffset = findNextOffset(position , positionOffset);
-//                }else {
-//                    //
-//                    Log.e(TAG , "toOffset =" + toOffset);
-//
-//                    pageScrolled(toOffset , positionOffset );
-//                }
-//            }
 
             Log.e("onPageScrolled" , " position = " +position + " positionOffset="+positionOffset +" positionOffsetPixels="+positionOffsetPixels);
         }

@@ -52,14 +52,32 @@ public class IndicatorView extends View {
     public void pageScrolled(int toOffset , float positionOffset){
         Log.e("111111" , "toOffset = " + toOffset);
         if (currentRect.isEmpty()){
-            currentRect = drawable.getBounds();
+            currentRect.set(drawable.getBounds());
         }
-        if (toOffset > currentRect.left){
-            int offset = (int) ((toOffset + indicatorWidth/2 - currentRect.right)*positionOffset);
-            Log.e("111111" , "offset = " + offset);
-            drawable.setBounds(currentRect.left , currentRect.top ,currentRect.right + offset , currentRect.bottom);
-        }else {
+        int iRight = toOffset + indicatorWidth/2;
+        int iLeft = toOffset - indicatorWidth/2;
 
+        if (toOffset > currentRect.left){
+            //+1
+            if (positionOffset>=0.5f){
+                int offset = (int) (2 * (iLeft - currentRect.left) * (positionOffset-0.5));
+                drawable.setBounds(currentRect.left + offset, currentRect.top , iRight, currentRect.bottom);
+            }else {
+                int offset = (int) ((iRight - currentRect.right)*positionOffset*2);
+                Log.e("111111" , "offset = " + offset);
+                drawable.setBounds(currentRect.left , currentRect.top ,currentRect.right + offset , currentRect.bottom);
+            }
+        }else {
+            //-1
+            positionOffset = 1 - positionOffset;
+            if (positionOffset>=0.5f){
+                int offset = (int) (2*(iRight - currentRect.right)*(positionOffset-0.5));
+                Log.e("111111" , "offset = " + offset);
+                drawable.setBounds(iLeft , currentRect.top ,currentRect.right + offset , currentRect.bottom);
+            }else {
+                int offset = (int) (2 * (iLeft - currentRect.left) * (positionOffset));
+                drawable.setBounds(currentRect.left + offset, currentRect.top , currentRect.right, currentRect.bottom);
+            }
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
