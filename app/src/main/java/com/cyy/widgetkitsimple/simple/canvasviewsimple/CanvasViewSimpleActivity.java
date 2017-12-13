@@ -2,6 +2,7 @@ package com.cyy.widgetkitsimple.simple.canvasviewsimple;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -11,20 +12,25 @@ import android.widget.Button;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
-import com.cyy.canvasview.CanvasView;
 import com.cyy.canvasview.ImageLoadDelegate;
+import com.cyy.canvasview.LayerCanvas;
+import com.cyy.canvasview.layers.StampLayer;
 import com.cyy.widgetkitsimple.R;
 import com.cyy.widgetkitsimple.base.BaseActivity;
 
 public class CanvasViewSimpleActivity extends BaseActivity implements View.OnClickListener {
 
-    protected CanvasView canvasView;
+    protected LayerCanvas layerCanvas;
     protected Button penView;
     protected Button eraserView;
     protected Button rotateLeftBtn;
     protected Button rotateRightBtn;
     protected Button preBtn;
     protected Button nextBtn;
+    protected Button stickerBtn;
+    protected Button mergeBtn;
+
+    private StampLayer stampLayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +45,7 @@ public class CanvasViewSimpleActivity extends BaseActivity implements View.OnCli
     }
 
     private void loadWithGlide(String url) {
-        canvasView.setmLoadImage(new ImageLoadDelegate.LoadImage() {
+        layerCanvas.getCanvasView().setmLoadImage(new ImageLoadDelegate.LoadImage() {
             @Override
             public void loadImage(Context context, String url, final ImageLoadDelegate.LoadImageCallback callback) {
                 Glide.with(context).asBitmap()
@@ -56,7 +62,7 @@ public class CanvasViewSimpleActivity extends BaseActivity implements View.OnCli
     }
 
     private void initView() {
-        canvasView = (CanvasView) findViewById(R.id.canvasView);
+        layerCanvas = (LayerCanvas) findViewById(R.id.layerCanvas);
         penView = (Button) findViewById(R.id.penView);
         penView.setOnClickListener(CanvasViewSimpleActivity.this);
         eraserView = (Button) findViewById(R.id.eraserView);
@@ -69,22 +75,36 @@ public class CanvasViewSimpleActivity extends BaseActivity implements View.OnCli
         preBtn.setOnClickListener(CanvasViewSimpleActivity.this);
         nextBtn = (Button) findViewById(R.id.nextBtn);
         nextBtn.setOnClickListener(CanvasViewSimpleActivity.this);
+        stickerBtn = (Button) findViewById(R.id.stickerBtn);
+        stickerBtn.setOnClickListener(CanvasViewSimpleActivity.this);
+        mergeBtn = (Button) findViewById(R.id.mergeBtn);
+        mergeBtn.setOnClickListener(CanvasViewSimpleActivity.this);
     }
 
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.penView) {
-            canvasView.pen();
+            layerCanvas.getCanvasView().pen();
         } else if (view.getId() == R.id.eraserView) {
-            canvasView.eraser();
+            layerCanvas.getCanvasView().eraser();
         } else if (view.getId() == R.id.rotateLeftBtn) {
-            canvasView.rotate(false);
+            layerCanvas.getCanvasView().rotate(false);
         } else if (view.getId() == R.id.rotateRightBtn) {
-            canvasView.rotate(true);
+            layerCanvas.getCanvasView().rotate(true);
         } else if (view.getId() == R.id.preBtn) {
-            canvasView.pre();
+            layerCanvas.getCanvasView().pre();
         } else if (view.getId() == R.id.nextBtn) {
 
+        } else if (view.getId() == R.id.stickerBtn) {
+            if (stampLayer == null) {
+                stampLayer = new StampLayer(this);
+            }
+            if (!stampLayer.isBegin()) {
+                stampLayer.begin(layerCanvas);
+            }
+            stampLayer.addStamp(BitmapFactory.decodeResource(getResources(), R.drawable.ico_sticker_smiling), true);
+        } else if (view.getId() == R.id.mergeBtn) {
+            stampLayer.end(layerCanvas);
         }
     }
 

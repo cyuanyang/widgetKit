@@ -6,21 +6,26 @@
     android:layout_height="match_parent"
     tools:context=".simple.canvasviewsimple.CanvasViewSimpleActivity">
 
-
-    <FrameLayout
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+    <com.cyy.canvasview.LayerCanvas
+        android:id="@+id/layerCanvas"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:background="@color/c_2b2b2b"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
-        <com.cyy.canvasview.CanvasView
-            android:id="@+id/canvasView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            />
-    </FrameLayout>
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <!--<FrameLayout-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="0dp"-->
+        <!--&gt;-->
+        <!--<com.cyy.canvasview.CanvasView-->
+            <!--android:id="@+id/canvasView"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--/>-->
+    <!--</FrameLayout>-->
 
 
     <android.support.constraint.ConstraintLayout
@@ -68,6 +73,24 @@
             app:layout_constraintBaseline_toBaselineOf="@+id/rotateLeftBtn"
             app:layout_constraintLeft_toRightOf="@+id/rotateLeftBtn" />
 
+        <Button
+            android:id="@+id/stickerBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="sticker"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <Button
+            android:id="@+id/mergeBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="merge"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/stickerBtn" />
+
     </android.support.constraint.ConstraintLayout>
 
     <Button
@@ -89,6 +112,8 @@
         android:text="next"
         app:layout_constraintBottom_toBottomOf="@+id/preBtn"
         app:layout_constraintLeft_toRightOf="@+id/preBtn" />
+
+
 
 
 </android.support.constraint.ConstraintLayout>

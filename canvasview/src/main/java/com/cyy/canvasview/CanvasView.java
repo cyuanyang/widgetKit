@@ -4,6 +4,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -28,6 +29,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by chenyuanyang on 2017/5/28.
@@ -39,6 +44,7 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
 
     private static final boolean DEBUG = true;
 
+    private static final int ERASER_MAX_WIDTH = 30;
     private static final int ROTATE_DURATION = 200;
     private static final int ERASER_WIDTH_FACTOR = 2; //橡皮和笔的比率
 
@@ -50,7 +56,7 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
     private int eraserWidth = originEraserWidth;
 
     private Bitmap originBitmap;//最初的bitmap
-    private Bitmap canvasBitmap;//画布的bitmap
+    Bitmap canvasBitmap;//画布的bitmap
     private Canvas mCanvas;
 
     private Paint mPenPaint; //笔触的paint
@@ -71,6 +77,8 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
     private boolean isEraser = false; //是否处于橡皮状态
 
     private Tracker mTracker;
+
+    private ArrayList<Layer> layers = new ArrayList<>();
 
     //todo 意外退出数据保存
     static class SaveState extends BaseSavedState{
@@ -339,30 +347,10 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
         mEraserCirclePaint.setStrokeWidth(w);
         float radius = mPenPaint.getStrokeWidth();
         canvas.drawCircle(mPathMap.downX() , mPathMap.downY() , radius , mEraserCirclePaint);
-
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-
-//        Paint paint= new Paint();
-//        paint.setColor(Color.RED);
-//        paint.setStrokeWidth(10);
-//        paint.setStyle(Paint.Style.STROKE);
-//        paint.setAntiAlias(true);
-//        paint.setStrokeCap(Paint.Cap.ROUND);
-//
-//        Path path = new Path();
-//        path.moveTo(500,500);
-//
-//        Point startPoint = new Point(100 , 500);
-//        Point endPoint = new Point(200 , 300);
-//        path.quadTo(startPoint.x, startPoint.y, endPoint.x, endPoint.y);
-//        canvas.drawPath(path , paint);
-//
-//        canvas.drawCircle(500,500 , 10 , paint);
-//        canvas.drawCircle(startPoint.x,startPoint.y , 5 , paint);
-//        canvas.drawCircle(endPoint.x,endPoint.y , 5 , paint);
 
         int count = canvas.save();
         if (canvasBitmap!=null){
@@ -382,7 +370,6 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
                 canvas.drawPath(mPathMap.getPaintingPath() , mPenPaint);
             }
         }
-        canvas.restoreToCount(count);
     }
 
     @Override
@@ -396,6 +383,18 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
         if (canvasBitmap!=null && !canvasBitmap.isRecycled()){
             canvasBitmap.recycle();
             canvasBitmap = null;
+        }
+
+    }
+
+    /**
+     * 合并图层
+     *
+     * 将指定图层于 mCanvas 进行合并
+     */
+    public void mergeLayer(Bitmap bitmap){
+        if (bitmap != null && !bitmap.isRecycled()) {
+            mCanvas.drawBitmap(bitmap, 0, 0, null);
         }
     }
 
@@ -427,6 +426,7 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
                     //获取速率
                     int vel = mTracker.velocity();
                     eraserWidth = originEraserWidth + vel/100;
+                    eraserWidth = eraserWidth > ERASER_MAX_WIDTH ? ERASER_MAX_WIDTH : eraserWidth;
                     setEraserWidth(eraserWidth);
                     mCanvas.drawPath(mPathMap.getTempPath() , mPenPaint);
                 }
@@ -519,4 +519,6 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
     public boolean isChanged() {
         return isChanged;
     }
+
+
 }
