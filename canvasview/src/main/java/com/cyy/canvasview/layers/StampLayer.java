@@ -2,7 +2,6 @@ package com.cyy.canvasview.layers;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.Rect;
 import android.view.MotionEvent;
 import android.view.View;
@@ -94,6 +93,14 @@ public class StampLayer extends Layer{
         return super.dispatchTouchEvent(ev);
     }
 
+    private int toX(int x){
+        return getCanvasView().toX(x);
+    }
+
+    private int toY(int y){
+        return getCanvasView().toY(y);
+    }
+
     private int preX , preY;
     private Stamp moveStamp;
     @Override
@@ -103,16 +110,17 @@ public class StampLayer extends Layer{
 
         switch (action){
             case MotionEvent.ACTION_DOWN:
-                preX = (int) event.getX();
-                preY = (int) event.getY();
+
+                preX = toX((int) event.getX());
+                preY = toY((int) event.getY());
 
                 moveStamp = findMoveStamp(preX , preY);
                 break;
             case MotionEvent.ACTION_MOVE:
 
                 if (moveStamp != null){
-                    int x = (int) event.getX();
-                    int y = (int) event.getY();
+                    int x = toX((int) event.getX());
+                    int y = toY((int) event.getY());
                     int offsetX = x - preX;
                     int offsetY = y - preY;
 
@@ -126,6 +134,8 @@ public class StampLayer extends Layer{
                 break;
             case MotionEvent.ACTION_UP:
 
+                preX = 0;
+                preY = 0;
                 if (moveStamp != null){
                     updateStampLocation();
                     moveStamp = null;

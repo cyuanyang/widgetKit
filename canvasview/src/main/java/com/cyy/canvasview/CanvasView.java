@@ -404,6 +404,14 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
         }
     }
 
+    public int toX(int x ){
+        return (int) mPathMap.toX(x);
+    }
+
+    public int toY(int y){
+        return (int) mPathMap.toY(y);
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 

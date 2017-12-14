@@ -2,6 +2,7 @@ package com.cyy.canvasview;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.view.MotionEvent;
 import android.widget.FrameLayout;
 
 /**
@@ -15,6 +16,7 @@ public abstract class Layer extends FrameLayout {
     private String identify;
     private boolean isBegin;
     private CanvasView.CanvasViewInfo canvasViewInfo;
+    private CanvasView canvasView;
 
     public Layer(Context context){
         super(context);
@@ -30,6 +32,7 @@ public abstract class Layer extends FrameLayout {
             canvasViewInfo = layerCanvas.getCanvasView().getCanvasViewInfo();
             layerCanvas.addLayer(this);
             this.isBegin = true;
+            this.canvasView = layerCanvas.getCanvasView();
         }
     }
 
@@ -58,6 +61,7 @@ public abstract class Layer extends FrameLayout {
             layerCanvas.removeView(this);
             reset();
             isBegin = false;
+            this.canvasView = null;
         }
     }
 
@@ -65,5 +69,11 @@ public abstract class Layer extends FrameLayout {
 
     }
 
+    public CanvasView getCanvasView() {
+        return canvasView;
+    }
+
     abstract public String getIdentify();
+
+
 }

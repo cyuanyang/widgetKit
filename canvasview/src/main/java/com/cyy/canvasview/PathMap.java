@@ -70,10 +70,10 @@ public class PathMap {
     }
 
     //屏幕坐标系转换画布坐标系
-    private float toX(float eventX){
+    public float toX(float eventX){
         return (eventX-translationX)/mScale;
     }
-    private float toY(float eventY){
+    public float toY(float eventY){
         return (eventY-translationY)/mScale;
     }
 
