@@ -1,13 +1,20 @@
 package com.cyy.canvasview;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.view.MotionEvent;
 import android.widget.FrameLayout;
 
 /**
  * Created by study on 17/12/13.
+ * 图层
  *
+ * begin 会根据画布的信息穿件一个图层
+ *
+ * 这里面才可以做图层操作
+ *
+ * end 关闭图层，释放图层占用资源
  *
  */
 
@@ -33,7 +40,21 @@ public abstract class Layer extends FrameLayout {
             layerCanvas.addLayer(this);
             this.isBegin = true;
             this.canvasView = layerCanvas.getCanvasView();
+            rotate(canvasViewInfo.rotateAngle , canvasViewInfo.rotateScale);
         }
+    }
+
+    private void rotate(float rotateAngle , float rotateScale){
+        if (Math.abs(rotateAngle)/90%2 == 1){
+            setScaleX(rotateScale);
+            setScaleY(rotateScale);
+        }else {
+            setScaleX(1);
+            setScaleY(1);
+        }
+
+        setRotation(rotateAngle);
+        canvasViewInfo.rotateAngle = rotateAngle;
     }
 
     public boolean isBegin(){

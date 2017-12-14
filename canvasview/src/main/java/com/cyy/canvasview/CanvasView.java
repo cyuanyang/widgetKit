@@ -237,6 +237,7 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
             mPathMap.resetPathMapMatrix(canvasMatrix);
 
             canvasViewInfo.matrix = canvasMatrix;
+            canvasViewInfo.rotateScale = rotateScale;
         }
     }
 
@@ -340,6 +341,8 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
             set.playTogether(anim);
         }
         set.start();
+
+        canvasViewInfo.rotateAngle = rotateAngle;
     }
 
     /**
@@ -543,5 +546,7 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
         int width;
         int height;
         Matrix matrix; //画布的矩阵信息
+        float rotateAngle = 0f; //画布旋转的角度
+        float rotateScale = 0f;
     }
 }

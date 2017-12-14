@@ -16,6 +16,9 @@ import java.util.List;
  * Created by study on 17/12/13.
  *
  * 图章图层
+ *
+ * addStamp()对该图层添加图章操作
+ *
  */
 
 public class StampLayer extends Layer{
@@ -36,7 +39,10 @@ public class StampLayer extends Layer{
         for (Stamp s : stamps) {
             s.release();
         }
+        stamps.clear();
     }
+
+
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
@@ -73,7 +79,6 @@ public class StampLayer extends Layer{
         }else {
             throw new IllegalStateException("请先调用开始方法");
         }
-
     }
 
     @Override
