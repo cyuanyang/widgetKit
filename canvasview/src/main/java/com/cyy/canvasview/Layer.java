@@ -1,6 +1,7 @@
 package com.cyy.canvasview;
 
 import android.content.Context;
+import android.graphics.Canvas;
 import android.widget.FrameLayout;
 
 /**
@@ -13,6 +14,7 @@ public abstract class Layer extends FrameLayout {
 
     private String identify;
     private boolean isBegin;
+    private CanvasView.CanvasViewInfo canvasViewInfo;
 
     public Layer(Context context){
         super(context);
@@ -24,7 +26,8 @@ public abstract class Layer extends FrameLayout {
     //开启一个图层
     public void begin(LayerCanvas layerCanvas){
         if (!isBegin){
-
+            //根据画板的信息来创建新图层
+            canvasViewInfo = layerCanvas.getCanvasView().getCanvasViewInfo();
             layerCanvas.addLayer(this);
             this.isBegin = true;
         }
@@ -32,6 +35,20 @@ public abstract class Layer extends FrameLayout {
 
     public boolean isBegin(){
         return isBegin;
+    }
+
+    @Override
+    public void draw(Canvas canvas) {
+        super.draw(canvas);
+    }
+
+    @Override
+    protected void dispatchDraw(Canvas canvas) {
+        canvas.save();
+        canvas.concat(canvasViewInfo.matrix);
+        canvas.clipRect(0,0,canvasViewInfo.width , canvasViewInfo.height);
+        super.dispatchDraw(canvas);
+        canvas.restore();
     }
 
     //合并图层

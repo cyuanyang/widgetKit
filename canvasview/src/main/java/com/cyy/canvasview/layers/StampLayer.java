@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.cyy.canvasview.Layer;
-import com.cyy.canvasview.LayerCanvas;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,8 +29,6 @@ public class StampLayer extends Layer{
 
     public StampLayer(Context context){
         super(context);
-
-        setBackgroundColor(Color.RED);
     }
 
     @Override

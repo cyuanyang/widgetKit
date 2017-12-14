@@ -78,7 +78,7 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
 
     private Tracker mTracker;
 
-    private ArrayList<Layer> layers = new ArrayList<>();
+    private CanvasViewInfo canvasViewInfo = new CanvasViewInfo();
 
     //todo 意外退出数据保存
     static class SaveState extends BaseSavedState{
@@ -188,6 +188,9 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
             return;
         }
 
+        canvasViewInfo.width = canvasBitmap.getWidth();
+        canvasViewInfo.height = canvasBitmap.getHeight();
+
         mCanvas = new Canvas(canvasBitmap);
         easerShader = new BitmapShader(canvasBitmap.copy(Bitmap.Config.RGB_565 , true) , Shader.TileMode.REPEAT , Shader.TileMode.REPEAT);
 
@@ -232,6 +235,8 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
 
             canvasMatrix.postScale(scale , scale);
             mPathMap.resetPathMapMatrix(canvasMatrix);
+
+            canvasViewInfo.matrix = canvasMatrix;
         }
     }
 
@@ -249,7 +254,6 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
             float bitmapScale = bitmapHeight*1f/bitmapWidth;
             return Math.max(viewScale , bitmapScale);
         }
-
     }
 
     /**
@@ -394,7 +398,9 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
      */
     public void mergeLayer(Bitmap bitmap){
         if (bitmap != null && !bitmap.isRecycled()) {
-            mCanvas.drawBitmap(bitmap, 0, 0, null);
+            Matrix matrix = new Matrix();
+            canvasMatrix.invert(matrix);
+            mCanvas.drawBitmap(bitmap, matrix, null);
         }
     }
 
@@ -520,5 +526,14 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
         return isChanged;
     }
 
+    public CanvasViewInfo getCanvasViewInfo(){
+        return canvasViewInfo;
+    }
 
+
+    static class CanvasViewInfo{
+        int width;
+        int height;
+        Matrix matrix; //画布的矩阵信息
+    }
 }
