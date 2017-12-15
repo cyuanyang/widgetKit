@@ -188,9 +188,6 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
             return;
         }
 
-        canvasViewInfo.width = canvasBitmap.getWidth();
-        canvasViewInfo.height = canvasBitmap.getHeight();
-
         mCanvas = new Canvas(canvasBitmap);
         easerShader = new BitmapShader(canvasBitmap.copy(Bitmap.Config.RGB_565 , true) , Shader.TileMode.REPEAT , Shader.TileMode.REPEAT);
 
@@ -238,7 +235,6 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
             canvasMatrix.postScale(scale , scale);
             mPathMap.resetPathMapMatrix(canvasMatrix);
 
-            canvasViewInfo.matrix = canvasMatrix;
             canvasViewInfo.rotateScale = rotateScale;
             canvasViewInfo.scale = scale;
         }
@@ -422,14 +418,6 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
         }
     }
 
-    public int toX(int x ){
-        return (int) mPathMap.toX(x);
-    }
-
-    public int toY(int y){
-        return (int) mPathMap.toY(y);
-    }
-
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
@@ -558,9 +546,6 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
 
 
     static class CanvasViewInfo{
-        int width;
-        int height;
-        Matrix matrix; //画布的矩阵信息
         float rotateAngle = 0f; //画布旋转的角度
         float rotateScale = 0f;
         float scale = 0.0f; //缩放系数

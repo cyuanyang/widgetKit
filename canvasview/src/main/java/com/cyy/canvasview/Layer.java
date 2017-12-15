@@ -2,7 +2,6 @@ package com.cyy.canvasview;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -33,7 +32,6 @@ public abstract class Layer extends FrameLayout {
 
         identify = getIdentify();
         setDrawingCacheEnabled(true);
-
     }
 
     //开启一个图层

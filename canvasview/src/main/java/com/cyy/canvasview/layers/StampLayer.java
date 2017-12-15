@@ -43,8 +43,6 @@ public class StampLayer extends Layer{
         stamps.clear();
     }
 
-
-
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         for (int i = 0 ; i < getChildCount() ; i++){
@@ -127,7 +125,6 @@ public class StampLayer extends Layer{
                     preX = x;
                     preY = y;
                 }
-
 
                 break;
             case MotionEvent.ACTION_UP:

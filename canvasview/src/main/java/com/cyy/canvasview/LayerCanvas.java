@@ -10,7 +10,8 @@ import android.widget.FrameLayout;
 /**
  * Created by study on 17/12/13.
  *
- *
+ * 数据保存的问题
+ * 意外销毁正在编辑的图层保存问题 
  */
 
 public class LayerCanvas extends FrameLayout {
