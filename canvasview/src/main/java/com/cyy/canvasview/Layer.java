@@ -2,6 +2,7 @@ package com.cyy.canvasview;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -32,6 +33,7 @@ public abstract class Layer extends FrameLayout {
 
         identify = getIdentify();
         setDrawingCacheEnabled(true);
+
     }
 
     //开启一个图层
@@ -41,7 +43,13 @@ public abstract class Layer extends FrameLayout {
             this.canvasView = layerCanvas.getCanvasView();
             //根据画板的信息来创建新图层 图层的大小 和 画板一样大 位置也一样
             canvasViewInfo = layerCanvas.getCanvasView().getCanvasViewInfo();
-            FrameLayout.LayoutParams lp = new LayoutParams((int) (canvasView.getWidth() * canvasViewInfo.scale), ViewGroup.LayoutParams.MATCH_PARENT);
+            FrameLayout.LayoutParams lp;
+            if (canvasViewInfo.isScaleDependOnWidth){
+                lp = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT , (int) (canvasViewInfo.height * canvasViewInfo.scale));
+            }else {
+                lp = new LayoutParams((int) (canvasViewInfo.width * canvasViewInfo.scale) , ViewGroup.LayoutParams.MATCH_PARENT );
+            }
+
             lp.gravity = Gravity.CENTER;
             layerCanvas.addLayer(this , lp);
 

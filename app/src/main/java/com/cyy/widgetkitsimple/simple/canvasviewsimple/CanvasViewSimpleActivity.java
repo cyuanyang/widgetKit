@@ -40,7 +40,7 @@ public class CanvasViewSimpleActivity extends BaseActivity implements View.OnCli
         getSupportActionBar().setTitle("CanvasViewSimpleActivity");
 
         String url = "http://attach.bbs.miui.com/forum/201705/24/152612pyffi5ii5qirfmrh.jpg";
-
+//        url = "http://ow7kpc7l6.bkt.clouddn.com//dev-sh-student/ab8f8b7b9437c77ca2e619dd03e88ef1.jpg";
         loadWithGlide(url);
     }
 

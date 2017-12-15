@@ -188,6 +188,9 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
             return;
         }
 
+        canvasViewInfo.width = canvasBitmap.getWidth();
+        canvasViewInfo.height = canvasBitmap.getHeight();
+
         mCanvas = new Canvas(canvasBitmap);
         easerShader = new BitmapShader(canvasBitmap.copy(Bitmap.Config.RGB_565 , true) , Shader.TileMode.REPEAT , Shader.TileMode.REPEAT);
 
@@ -203,6 +206,7 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
         //计算缩放系数和平移
+        //主要将图片放倒View中间的位置 图片不能有裁剪
         if (originBitmap!=null) {
             canvasMatrix.reset();
             int widthSpec = MeasureSpec.getSize(widthMeasureSpec);
@@ -211,12 +215,14 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
             int originBitmapWidth = originBitmap.getWidth();
             int originBitmapHeight = originBitmap.getHeight();
 
-            int max = Math.max(originBitmapWidth, originBitmapHeight);
+            float viewScale = widthSpec*1.0f/heightSpec;
+            float bitmapViewScale = originBitmapWidth*1.0f/originBitmapHeight;
+            float max = Math.max(viewScale, bitmapViewScale);
             float scale;
 
-            if (max == originBitmapHeight) {
+            if (max == viewScale) {
                 //缩放平移到中间
-                scale = heightSpec * 1.0f / max;
+                scale = heightSpec * 1.0f / originBitmapHeight;
                 canvasMatrix.postTranslate((widthSpec-originBitmapWidth*scale)/2/scale , 0);
                 //计算旋转缩放系数
                 rotateScale = calculateRotate(originBitmapWidth, originBitmapHeight ,
@@ -224,7 +230,7 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
                 canvasViewInfo.isScaleDependOnWidth = false;
             } else {
                 //缩放平移到中间
-                scale = widthSpec * 1.0f / max;
+                scale = widthSpec * 1.0f / originBitmapWidth;
                 canvasMatrix.postTranslate(0 , (heightSpec-originBitmapHeight*scale)/2/scale);
                 //计算旋转缩放系数
                 rotateScale = calculateRotate(originBitmapWidth, originBitmapHeight ,
@@ -238,6 +244,43 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
             canvasViewInfo.rotateScale = rotateScale;
             canvasViewInfo.scale = scale;
         }
+
+//        //计算缩放系数和平移
+//        if (originBitmap!=null) {
+//            canvasMatrix.reset();
+//            int widthSpec = MeasureSpec.getSize(widthMeasureSpec);
+//            int heightSpec = MeasureSpec.getSize(heightMeasureSpec);
+//
+//            int originBitmapWidth = originBitmap.getWidth();
+//            int originBitmapHeight = originBitmap.getHeight();
+//
+//            int max = Math.max(originBitmapWidth, originBitmapHeight);
+//            float scale;
+//
+//            if (max == originBitmapHeight) {
+//                //缩放平移到中间
+//                scale = heightSpec * 1.0f / max;
+//                canvasMatrix.postTranslate((widthSpec-originBitmapWidth*scale)/2/scale , 0);
+//                //计算旋转缩放系数
+//                rotateScale = calculateRotate(originBitmapWidth, originBitmapHeight ,
+//                        getMeasuredWidth() , getMeasuredHeight() , true);
+//                canvasViewInfo.isScaleDependOnWidth = false;
+//            } else {
+//                //缩放平移到中间
+//                scale = widthSpec * 1.0f / max;
+//                canvasMatrix.postTranslate(0 , (heightSpec-originBitmapHeight*scale)/2/scale);
+//                //计算旋转缩放系数
+//                rotateScale = calculateRotate(originBitmapWidth, originBitmapHeight ,
+//                        getMeasuredWidth() , getMeasuredHeight() , false);
+//                canvasViewInfo.isScaleDependOnWidth = true;
+//            }
+//
+//            canvasMatrix.postScale(scale , scale);
+//            mPathMap.resetPathMapMatrix(canvasMatrix);
+//
+//            canvasViewInfo.rotateScale = rotateScale;
+//            canvasViewInfo.scale = scale;
+//        }
     }
 
     /**
@@ -546,6 +589,8 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
 
 
     static class CanvasViewInfo{
+        int width;
+        int height;
         float rotateAngle = 0f; //画布旋转的角度
         float rotateScale = 0f;
         float scale = 0.0f; //缩放系数

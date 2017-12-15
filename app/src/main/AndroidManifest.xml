@@ -24,9 +24,11 @@
         <activity android:name=".simple.soundsimple.SoundSimpleActivity" />
         <activity android:name=".simple.mathview.MathViewSimple" />
         <activity android:name=".simple.slidefinish.SlideFinishSimple" />
-        <activity android:name=".simple.slidefinish.TwoActivity"
-            android:theme="@style/AppTheme.Transparent"/>
-        <activity android:name=".simple.pagerindicator.PagerIndicatorSimple"/>
+        <activity
+            android:name=".simple.slidefinish.TwoActivity"
+            android:theme="@style/AppTheme.Transparent" />
+        <activity android:name=".simple.pagerindicator.PagerIndicatorSimple" />
+        <activity android:name=".simple.JavaMathSimple"></activity>
     </application>
 
 </manifest>
