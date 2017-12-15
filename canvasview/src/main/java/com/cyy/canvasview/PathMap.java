@@ -73,6 +73,7 @@ public class PathMap {
     public float toX(float eventX){
         return (eventX-translationX)/mScale;
     }
+
     public float toY(float eventY){
         return (eventY-translationY)/mScale;
     }

@@ -36,6 +36,7 @@ public class StampLayer extends Layer{
     @Override
     protected void reset(){
         super.reset();
+        this.removeAllViews();
         for (Stamp s : stamps) {
             s.release();
         }
@@ -66,11 +67,11 @@ public class StampLayer extends Layer{
 
     /**
      * 添加图章
-     * @param bitmap 图章
+     * @param bitmap 图章 这个bitmap会在结束的时候自动调用recycle
      */
     public void addStamp(Bitmap bitmap , boolean isCenter){
         if (isBegin()){
-            Stamp stamp = new Stamp(getContext() , bitmap);
+            Stamp stamp = new Stamp(getContext() , bitmap , canvasViewrotateAngle());
             stamp.isCenter = isCenter;
             addView(stamp.imageView);
             stamps.add(stamp);
@@ -98,14 +99,6 @@ public class StampLayer extends Layer{
         return super.dispatchTouchEvent(ev);
     }
 
-    private int toX(int x){
-        return getCanvasView().toX(x);
-    }
-
-    private int toY(int y){
-        return getCanvasView().toY(y);
-    }
-
     private int preX , preY;
     private Stamp moveStamp;
     @Override
@@ -116,16 +109,16 @@ public class StampLayer extends Layer{
         switch (action){
             case MotionEvent.ACTION_DOWN:
 
-                preX = toX((int) event.getX());
-                preY = toY((int) event.getY());
+                preX = (int) event.getX();
+                preY = (int) event.getY();
 
                 moveStamp = findMoveStamp(preX , preY);
                 break;
             case MotionEvent.ACTION_MOVE:
 
                 if (moveStamp != null){
-                    int x = toX((int) event.getX());
-                    int y = toY((int) event.getY());
+                    int x = (int) event.getX();
+                    int y = (int) event.getY();
                     int offsetX = x - preX;
                     int offsetY = y - preY;
 
@@ -178,9 +171,10 @@ public class StampLayer extends Layer{
         boolean isCenter;
         Rect rect;
 
-        public Stamp(Context context ,Bitmap bitmap){
+        public Stamp(Context context ,Bitmap bitmap , float rotate){
             this.bitmap = bitmap;
             imageView = new ImageView(context);
+            imageView.setRotation(-rotate);
             imageView.setImageBitmap(bitmap);
             rect = new Rect();
             imageView.setTag(rect);

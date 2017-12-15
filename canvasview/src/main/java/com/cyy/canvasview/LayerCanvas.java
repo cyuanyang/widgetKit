@@ -51,9 +51,12 @@ public class LayerCanvas extends FrameLayout {
         addView(layer);
     }
 
+    public void addLayer(Layer layer , LayoutParams lp){
+        addView(layer , lp);
+    }
+
     public void mergeLayer(Layer layer){
         Bitmap bitmap = layer.getDrawingCache();
         canvasView.mergeLayer(bitmap);
-        bitmap.recycle();
     }
 }

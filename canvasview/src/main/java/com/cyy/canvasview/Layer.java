@@ -1,9 +1,10 @@
 package com.cyy.canvasview;
 
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.view.Gravity;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 /**
@@ -25,23 +26,34 @@ public abstract class Layer extends FrameLayout {
     private CanvasView.CanvasViewInfo canvasViewInfo;
     private CanvasView canvasView;
 
+
+
     public Layer(Context context){
         super(context);
 
         identify = getIdentify();
         setDrawingCacheEnabled(true);
+
     }
 
     //开启一个图层
     public void begin(LayerCanvas layerCanvas){
         if (!isBegin){
-            //根据画板的信息来创建新图层
-            canvasViewInfo = layerCanvas.getCanvasView().getCanvasViewInfo();
-            layerCanvas.addLayer(this);
             this.isBegin = true;
             this.canvasView = layerCanvas.getCanvasView();
+            //根据画板的信息来创建新图层 图层的大小 和 画板一样大 位置也一样
+            canvasViewInfo = layerCanvas.getCanvasView().getCanvasViewInfo();
+            FrameLayout.LayoutParams lp = new LayoutParams((int) (canvasView.getWidth() * canvasViewInfo.scale), ViewGroup.LayoutParams.MATCH_PARENT);
+            lp.gravity = Gravity.CENTER;
+            layerCanvas.addLayer(this , lp);
+
             rotate(canvasViewInfo.rotateAngle , canvasViewInfo.rotateScale);
         }
+    }
+
+    @Override
+    protected LayoutParams generateDefaultLayoutParams() {
+        return super.generateDefaultLayoutParams();
     }
 
     private void rotate(float rotateAngle , float rotateScale){
@@ -68,11 +80,7 @@ public abstract class Layer extends FrameLayout {
 
     @Override
     protected void dispatchDraw(Canvas canvas) {
-        canvas.save();
-        canvas.concat(canvasViewInfo.matrix);
-        canvas.clipRect(0,0,canvasViewInfo.width , canvasViewInfo.height);
         super.dispatchDraw(canvas);
-        canvas.restore();
     }
 
     //合并图层
@@ -92,6 +100,14 @@ public abstract class Layer extends FrameLayout {
 
     public CanvasView getCanvasView() {
         return canvasView;
+    }
+
+    /**
+     * 获取当前画布的旋转角度
+     * @return rotateAngle
+     */
+    public float canvasViewrotateAngle(){
+        return canvasView.getCanvasViewInfo().rotateAngle;
     }
 
     abstract public String getIdentify();

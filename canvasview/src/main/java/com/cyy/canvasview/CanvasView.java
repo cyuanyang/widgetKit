@@ -224,6 +224,7 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
                 //计算旋转缩放系数
                 rotateScale = calculateRotate(originBitmapWidth, originBitmapHeight ,
                         getMeasuredWidth() , getMeasuredHeight() , true);
+                canvasViewInfo.isScaleDependOnWidth = false;
             } else {
                 //缩放平移到中间
                 scale = widthSpec * 1.0f / max;
@@ -231,6 +232,7 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
                 //计算旋转缩放系数
                 rotateScale = calculateRotate(originBitmapWidth, originBitmapHeight ,
                         getMeasuredWidth() , getMeasuredHeight() , false);
+                canvasViewInfo.isScaleDependOnWidth = true;
             }
 
             canvasMatrix.postScale(scale , scale);
@@ -238,6 +240,7 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
 
             canvasViewInfo.matrix = canvasMatrix;
             canvasViewInfo.rotateScale = rotateScale;
+            canvasViewInfo.scale = scale;
         }
     }
 
@@ -401,9 +404,21 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
      */
     public void mergeLayer(Bitmap bitmap){
         if (bitmap != null && !bitmap.isRecycled()) {
+
+            //矩阵求逆
+            Matrix temMatrix = new Matrix();
+            canvasMatrix.invert(temMatrix);
+
+            //得到缩放比
+            float[] values = new float[9];
+            temMatrix.getValues(values);
+            float scale = values[Matrix.MSCALE_X];
+
+            //还原图片
             Matrix matrix = new Matrix();
-            canvasMatrix.invert(matrix);
+            matrix.postScale(scale , scale);
             mCanvas.drawBitmap(bitmap, matrix, null);
+
         }
     }
 
@@ -548,5 +563,7 @@ public class CanvasView extends View implements ImageLoadDelegate.LoadImageCallb
         Matrix matrix; //画布的矩阵信息
         float rotateAngle = 0f; //画布旋转的角度
         float rotateScale = 0f;
+        float scale = 0.0f; //缩放系数
+        boolean isScaleDependOnWidth = false;  //true 按照宽度最大缩放  false 反之
     }
 }
