@@ -67,13 +67,11 @@ class JLatexView : TextView {
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-
         var pWidth = mathViewWidth
         if (latexMaxWidth>mathViewWidth){
             pWidth = latexMaxWidth;
         }
         super.onMeasure(MeasureSpec.makeMeasureSpec(pWidth , MeasureSpec.EXACTLY), heightMeasureSpec)
-
     }
 
     private fun bindLatex(){
@@ -91,7 +89,6 @@ class JLatexView : TextView {
 
             spannable.setSpan(imageSpan , start , end , Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
         }
-
         text = spannable
     }
 

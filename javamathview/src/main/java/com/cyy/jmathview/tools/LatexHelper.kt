@@ -8,7 +8,7 @@ import java.util.regex.Pattern
  *
  */
 
-class LatexHepler{
+class LatexHelper {
 
     private val FORMULA_REG = Pattern.compile("([<>&])")
 
@@ -17,7 +17,6 @@ class LatexHepler{
      */
     fun getText(tex:String , token:String):String{
         return "<"+token+">" + dealSpecalCahr(tex) +"</"+token+">"
-
     }
 
     //匹配 <  >  &

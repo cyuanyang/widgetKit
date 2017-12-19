@@ -39,8 +39,8 @@ class TextTag: Tag {
     
     override fun buildView(parent: LinearLayout, attrs:Map<String , String> , text:String?): View {
         return JLatexView(parent.context).apply {
-            this.latex = text
             this.setTextColor(android.graphics.Color.BLACK)
+            this.latex = text
         }
     }
 
