@@ -19,7 +19,6 @@ interface ViewDelegate{
     fun buildView(tag:String , attrs:Map<String , String> , text:String?): ViewModel
 }
 
-
 internal class XMLParser(view: ViewDelegate){
 
     private val mathView: ViewDelegate = view
@@ -72,6 +71,8 @@ internal class XMLParser(view: ViewDelegate){
     }
 
     internal fun getViews():List<ViewModel> = views.toList()
+
+
 }
 
 data class ViewModel(val view:View ,val data:String?)

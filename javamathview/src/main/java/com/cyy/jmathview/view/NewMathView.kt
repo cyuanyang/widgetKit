@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
 import com.cyy.jmathview.parser.*
-import com.xstudy.jlatexmath.parser.*
 
 /**
  * Created by study on 17/11/29.
@@ -110,13 +109,6 @@ class NewMathView : HorizontalScrollView , ViewDelegate {
 
     override fun buildView(tag: String, attrs: Map<String, String>, text: String?): ViewModel {
         tags.find { it.tag() == tag  }?.let {
-//            var view:View? = null
-//            if (views.size>0){
-//                //取出以前的view复用
-//
-//            }else{
-//
-//            }
             val view = it.buildView(contentView!! , attrs , text)
             return ViewModel(view , text)
         }
