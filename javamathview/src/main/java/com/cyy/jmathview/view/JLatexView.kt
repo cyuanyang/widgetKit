@@ -28,9 +28,9 @@ class JLatexView : TextView {
     private val FORMULA_REG1 = Pattern.compile("(?i)\\$\\$?((.|\\n)+?)\\$\\$?")
     private val FORMULA_REG2 = Pattern.compile("(?i)\\\\[(\\[]((.|\\n)*?)\\\\[\\])]")
     private val FORMULA_REG3 = Pattern.compile("(?i)\\[tex]((.|\\n)*?)\\[/tex]")
-    private val FORMULA_REG4 = Pattern.compile("(?i)\\\\begin\\{.*?\\}(.|\\n)*?\\\\end\\{.*?\\}")
+//    private val FORMULA_REG4 = Pattern.compile("(?i)\\\\begin\\{.*?\\}(.|\\n)*?\\\\end\\{.*?\\}")
     // private static final Pattern FORMULA_REG5 = Pattern.compile("(?i)\\$\\$(.+?)\\$\\$");
-    private val PATTERNS = arrayOf(FORMULA_REG1, FORMULA_REG2, FORMULA_REG3, FORMULA_REG4)
+    private val PATTERNS = arrayOf(FORMULA_REG1, FORMULA_REG2, FORMULA_REG3)
 
     constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
@@ -69,7 +69,7 @@ class JLatexView : TextView {
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         var pWidth = mathViewWidth
         if (latexMaxWidth>mathViewWidth){
-            pWidth = latexMaxWidth;
+            pWidth = latexMaxWidth
         }
         super.onMeasure(MeasureSpec.makeMeasureSpec(pWidth , MeasureSpec.EXACTLY), heightMeasureSpec)
     }

@@ -269,10 +269,15 @@ public class PagerIndicator extends HorizontalScrollView{
 
         private boolean isNeedFindNext = true;
         private int offset;
+        private boolean isTouch = false; //true 点击 false滑动
+        private boolean touchDealed = false;
         private int nextIndex;
         private int state = ViewPager.SCROLL_STATE_IDLE;
 
         private int prePosition = -1;
+
+        //true 想拖动的时候 View Pager 还在滚动
+        private boolean isSettlingWhenDrag = false;
 
         private ViewBean preViewBean;
         @Override
@@ -285,6 +290,7 @@ public class PagerIndicator extends HorizontalScrollView{
         @Override
         public void onPageScrollStateChanged(int state) {
             super.onPageScrollStateChanged(state);
+            isSettlingWhenDrag = false;
             if (state != ViewPager.SCROLL_STATE_IDLE ){
                 preViewBean = currentViewBean;
             }else {
@@ -293,7 +299,12 @@ public class PagerIndicator extends HorizontalScrollView{
                 offset = 0;
                 pageScrolledEnd();
             }
+            if (this.state == ViewPager.SCROLL_STATE_SETTLING && state == ViewPager.SCROLL_STATE_DRAGGING){
+                isSettlingWhenDrag = true;
+            }
             this.state = state;
+
+            Log.e("state" ,"state = "+ state);
         }
 
         @Override
@@ -312,15 +323,22 @@ public class PagerIndicator extends HorizontalScrollView{
                         //左
                         offset = findIndicatorNextOffset(position);
                     }
+                    isTouch = false;
                 }else {
                     //点击
                     offset = findIndicatorNextOffset(currentViewBean.index);
+                    isTouch = true;
                 }
 
                 Log.e(TAG ,"next offset = " +offset);
+            }
+            if (isTouch){
+                touchDealed = true;
 
             }
-
+            if (isTouch && touchDealed){
+                return;
+            }
             if (state != ViewPager.SCROLL_STATE_IDLE){
                 if (prePosition== -1 || prePosition == position){
                     if (offset!=0){
@@ -329,7 +347,6 @@ public class PagerIndicator extends HorizontalScrollView{
                 }
                 prePosition = position;
             }
-
 
             Log.e("onPageScrolled" , " position = " +position + " positionOffset="+positionOffset +" positionOffsetPixels="+positionOffsetPixels);
         }
