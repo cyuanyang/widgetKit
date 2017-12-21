@@ -2,7 +2,7 @@ package com.cyy.widgetkitsimple.simple;
 
 import android.os.Bundle;
 
-import com.cyy.jmathview.tools.LatexHelper;
+import com.cyy.jmathview.tools.LatexBuilder;
 import com.cyy.jmathview.view.NewMathView;
 import com.cyy.widgetkitsimple.R;
 import com.cyy.widgetkitsimple.base.BaseActivity;
@@ -17,7 +17,7 @@ public class JavaMathSimple extends BaseActivity {
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.activity_java_math_simple);
         initView();
-        mathView.setText(new LatexHelper().getText(test , "text"));
+        mathView.setText(new LatexBuilder().text(test , "text").img().build());
     }
 
     private void initView() {

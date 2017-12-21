@@ -3,6 +3,7 @@ package com.cyy.jmathview.parser
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
+import com.cyy.jmathview.R
 import com.cyy.jmathview.view.JLatexView
 
 /**
@@ -27,7 +28,7 @@ class ImageTag: Tag {
 
     override fun buildView(parent: LinearLayout, attrs:Map<String , String> , text:String?): View {
         return ImageView(parent.context).apply {
-            setImageResource(android.R.drawable.presence_busy)
+            setImageResource(R.drawable.ic_launcher)
         }
     }
 }

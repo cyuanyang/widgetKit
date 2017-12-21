@@ -8,19 +8,30 @@ import java.util.regex.Pattern
  *
  */
 
-class LatexHelper {
-
+class LatexBuilder {
     private val FORMULA_REG = Pattern.compile("([<>&])")
 
+    private var result:StringBuilder = StringBuilder();
     /**
      * 返回解析latex的标签
      */
-    fun getText(tex:String , token:String):String{
-        return "<"+token+">" + dealSpecalCahr(tex) +"</"+token+">"
+    fun text(text:String , token:String):LatexBuilder{
+        result.append("<"+token+">" + dealSpecalCahr(text) +"</"+token+">")
+
+        return this
+    }
+
+    fun img():LatexBuilder{
+        result.append("<img/>")
+        return this
+    }
+
+    fun build():String{
+        return result.toString()
     }
 
     //匹配 <  >  &
-    fun dealSpecalCahr(s: String): String {
+    private fun dealSpecalCahr(s: String): String {
         val sb = StringBuffer(s)
         val starts = SparseArray<String>()
         val m = FORMULA_REG.matcher(s)
