@@ -17,7 +17,6 @@ public class JavaMathSimple extends BaseActivity {
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.activity_java_math_simple);
         initView();
-//        test = "$f$";
         mathView.setText(new LatexHelper().getText(test , "text"));
     }
 
