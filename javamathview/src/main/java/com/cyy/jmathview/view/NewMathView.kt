@@ -37,7 +37,6 @@ class NewMathView : HorizontalScrollView , ViewDelegate {
 
     private var contentView: LinearLayout? = null
     private val latexViews = mutableListOf<JLatexView>() //所有的latexView
-    private val views = mutableListOf<View>() //所有的imageView
 
     //默认的tag
     private var tags = mutableListOf<Tag>()
