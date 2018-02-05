@@ -1,1 +1,1 @@
-include ':app', ':soundview', ':canvasview', ':mathview_mathjax', ':mathview_katex', ':slidefinishlayout', ':listplayer', ':pagerindicator', ':javamathview'
+include ':app', ':soundview', ':canvasview', ':mathview_mathjax', ':mathview_katex', ':slidefinishlayout', ':listplayer', ':pagerindicator', ':javamathview', ':bulletscreen'
