@@ -45,6 +45,10 @@ public class PickerImage {
 
     private PickerImage(int model , int max , File saveCropImageFolder,int cropW ,int cropH,
                         PickedCompleteListener pickedCompleteListener){
+
+        //init
+        isOriginal = false;
+
         PickerImage.model = model;
         PickerImage.cropH = cropH;
         PickerImage.cropW = cropW;
@@ -77,6 +81,8 @@ public class PickerImage {
                     pickedCompleteListener.cancel();
                 }
             }
+
+
         }
     }
 
