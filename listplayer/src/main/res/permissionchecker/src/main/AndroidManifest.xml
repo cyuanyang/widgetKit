@@ -1,0 +1,11 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.permission" >
+
+    <application>
+        <activity android:name=".PermissionActivity"
+            android:theme="@style/permission_PermissionActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:launchMode="standard"
+            android:windowSoftInputMode="stateHidden|stateAlwaysHidden"/>
+    </application>
+</manifest>

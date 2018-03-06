@@ -39,4 +39,6 @@ dependencies {
 
     compile project(':pagerindicator')
     compile project(':javamathview')
+    compile project(':imagepicker')
+    compile project(':permissionchecker')
 }
