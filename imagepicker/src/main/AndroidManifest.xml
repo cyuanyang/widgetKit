@@ -1,0 +1,15 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.tal.imagepicker" >
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <application
+        android:allowBackup="true"
+        android:label="@string/app_name"
+        android:supportsRtl="true">
+
+        <activity
+            android:name="com.tal.imagepicker.ui.PickerActivity"
+            android:fitsSystemWindows="true"/>
+
+    </application>
+
+</manifest>

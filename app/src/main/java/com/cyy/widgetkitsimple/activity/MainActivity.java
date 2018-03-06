@@ -13,6 +13,7 @@ import com.cyy.widgetkitsimple.simple.JavaMathSimple;
 import com.cyy.widgetkitsimple.simple.pagerindicator.PagerIndicatorSimple;
 import com.cyy.widgetkitsimple.simple.canvasviewsimple.CanvasViewSimpleActivity;
 import com.cyy.widgetkitsimple.simple.mathview.MathViewSimple;
+import com.cyy.widgetkitsimple.simple.pickimage.PickImageSimple;
 import com.cyy.widgetkitsimple.simple.slidefinish.SlideFinishSimple;
 import com.cyy.widgetkitsimple.simple.soundsimple.SoundSimpleActivity;
 
@@ -51,6 +52,7 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemClic
         datas.add(new Simple("math view simple" , MathViewSimple.class));
         datas.add(new Simple("Slide Finish View Simple" , SlideFinishSimple.class));
         datas.add(new Simple("New Math View Simple" , JavaMathSimple.class));
+        datas.add(new Simple("Pick Image Simple" , PickImageSimple.class));
     }
 
     private void initView() {

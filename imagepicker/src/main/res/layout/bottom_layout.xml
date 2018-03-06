@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main_color">
+
+    <TextView
+        android:id="@+id/dirNameView"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="15dp"
+        android:gravity="center"
+        android:drawableRight="@mipmap/ic_bottom_name"
+        android:textSize="18sp"
+        android:textColor="@color/white"
+        android:maxLength="8"
+        android:ellipsize="end"
+        android:text="图片" />
+
+    <com.tal.imagepicker.ui.views.PickView
+        android:id="@+id/originalCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        app:pickText="原图" />
+
+    <TextView
+        android:id="@+id/previewImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="15dp"
+        android:gravity="center"
+        android:enabled="false"
+        android:textColor="@drawable/text_color"
+        android:textSize="18sp"
+        android:text="预览" />
+
+</RelativeLayout>

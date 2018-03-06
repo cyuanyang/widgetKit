@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="main_color">#575863</color>
+    <color name="transparent_main_color">#aa8B40ED</color>
+
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="color_191919">#191919</color>
+    <color name="color_dddddd">#dddddd</color>
+
+    <color name="color_881aad19">#881aad19</color>
+    <color name="color_1aad19">#1aad19</color>
+
+    <color name="grid_bg_color">#dddddd</color>
+
+    <color name="transparent">#00000000</color>
+
+
+</resources>

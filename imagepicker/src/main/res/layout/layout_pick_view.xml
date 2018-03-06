@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <com.tal.imagepicker.ui.views.ToggleView
+        android:id="@+id/toggle_view"
+        android:layout_width="23dp"
+        android:layout_height="23dp"
+        android:layout_marginLeft="10dp" />
+
+    <TextView
+        android:id="@+id/pickTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:textSize="20sp"
+        android:layout_marginLeft="5dp"
+        android:textColor="@drawable/text_color" />
+</merge>
